@@ -1,0 +1,1140 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#004A8D">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="CRM PRO">
+  <link rel="manifest" href="manifest.json">
+  <title>Super App CRM - Bankaltimtara</title>
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+    body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #F8FAFC; overscroll-behavior-y: none; -webkit-tap-highlight-color: transparent; padding-top: env(safe-area-inset-top); }
+    .bg-bpd-blue { background-color: #004A8D; } .bg-bpd-orange { background-color: #F37021; } .text-bpd-orange { color: #F37021; } .text-bpd-blue { color: #004A8D; }
+    .glass-nav { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(15px); border-top: 1px solid rgba(0,0,0,0.05); padding-bottom: calc(env(safe-area-inset-bottom) + 0.75rem); }
+    .card-shadow { box-shadow: 0 8px 30px rgba(0, 0, 0, 0.04); border: 1px solid rgba(226, 232, 240, 0.8); }
+    .input-field { background-color: #F1F5F9; border: 1.5px solid transparent; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); text-transform: uppercase; }
+    .input-field:focus { border-color: #004A8D; background-color: #FFFFFF; outline: none; box-shadow: 0 0 0 4px rgba(0, 74, 141, 0.1); }
+    .nav-item { color: #94A3B8; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); flex: 1; cursor: pointer; }
+    .nav-item.active { color: #F37021; transform: translateY(-3px); } .nav-item.active i { transform: scale(1.15); }
+    .progress-fill { transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1); }
+    ::-webkit-scrollbar { display: none; }
+    .animate-fade-in { animation: fadeIn 0.3s ease-out forwards; } @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    .animate-slide-up { animation: slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards; opacity: 0; transform: translateY(20px); } @keyframes slideUp { to { opacity: 1; transform: translateY(0); } }
+    .tab-btn { padding: 10px 0; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: #94A3B8; border-bottom: 2px solid transparent; transition: all 0.3s; }
+    .tab-btn.active { color: #004A8D; border-bottom-color: #004A8D; }
+    .admin-tab { padding: 12px 0; font-size: 12px; font-weight: 800; text-transform: uppercase; color: #94A3B8; background: transparent; transition: all 0.3s; border-radius: 12px; }
+    .admin-tab.active { background: #004A8D; color: white; box-shadow: 0 4px 10px rgba(0,74,141,0.2); }
+    .pulse-red { animation: pulseRed 2s infinite; } @keyframes pulseRed { 0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); } 70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); } 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); } }
+    
+    /* CSS SUPER UNTUK CETAK PDF */
+    @media print { 
+        body * { visibility: hidden; } 
+        #printArea, #printArea * { visibility: visible; } 
+        #printArea { position: absolute; left: 0; top: 0; width: 100%; background: #ffffff !important; padding: 20px; font-family: 'Plus Jakarta Sans', sans-serif; color: #1e293b; z-index: 9999; } 
+        .no-print { display: none !important; } 
+        * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+        .print-badge-closing { background: #d1fae5 !important; color: #047857 !important; padding: 3px 8px; border-radius: 4px; font-size: 10px; font-weight: 800; display: inline-block; }
+        .print-badge-prospek { background: #fef3c7 !important; color: #b45309 !important; padding: 3px 8px; border-radius: 4px; font-size: 10px; font-weight: 800; display: inline-block; }
+        .print-badge-ditolak { background: #ffe4e6 !important; color: #be123c !important; padding: 3px 8px; border-radius: 4px; font-size: 10px; font-weight: 800; display: inline-block; }
+        .print-table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 11px; }
+        .print-table th { background: #004A8D !important; color: #ffffff !important; padding: 10px; text-align: left; border: 1px solid #004A8D; }
+        .print-table td { border: 1px solid #cbd5e1; padding: 10px; vertical-align: top; }
+        .print-table tr:nth-child(even) { background-color: #f8fafc !important; }
+        .print-log { border-left: 2px solid #94a3b8; padding-left: 8px; margin-bottom: 8px; }
+        .print-header { border-bottom: 3px solid #004A8D; padding-bottom: 12px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: flex-end; }
+        @page { size: A4 portrait; margin: 1.5cm; }
+    }
+  </style>
+</head>
+<body class="text-slate-800 pb-24 selection:bg-blue-200">
+
+  <div id="offlineAlert" class="hidden fixed top-0 w-full bg-rose-500 text-white text-[10px] font-bold text-center py-2 z-[999] shadow-md uppercase tracking-widest transition-all"><i class="fa-solid fa-wifi mr-1"></i> Mode Offline: Menunggu Koneksi Stabil</div>
+
+  <div id="modalGlobalSearch" class="hidden fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-[999] p-4 flex flex-col pt-10 animate-fade-in no-print">
+      <div class="bg-white rounded-3xl w-full max-w-md mx-auto p-2 relative flex items-center shadow-2xl border-2 border-bpd-blue">
+          <i class="fa-solid fa-search absolute left-5 text-slate-400 text-lg"></i>
+          <input type="text" id="globalSearchInput" onkeyup="runGlobalSearch()" placeholder="CARI NASABAH, NO HP..." autocomplete="off" class="w-full pl-12 pr-12 py-4 rounded-2xl outline-none text-sm font-black uppercase bg-transparent">
+          <button onclick="closeGlobalSearch()" class="absolute right-4 text-rose-500 bg-rose-50 w-8 h-8 rounded-full flex justify-center items-center"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div id="globalSearchResults" class="mt-4 space-y-2 overflow-y-auto pb-10 max-w-md mx-auto w-full">
+          <p class="text-center text-xs text-slate-300 font-bold tracking-widest mt-10">KETIK UNTUK MENCARI DATA...</p>
+      </div>
+  </div>
+
+  <div id="modalNotif" class="hidden fixed inset-0 bg-slate-900/70 backdrop-blur-sm z-[998] flex items-center justify-center p-4 animate-fade-in no-print">
+      <div class="bg-white rounded-3xl w-full max-w-sm p-6 shadow-2xl relative">
+          <button type="button" onclick="closeNotifications()" class="absolute top-4 right-4 text-slate-400 bg-slate-100 rounded-full w-8 h-8 flex justify-center items-center hover:bg-slate-200 transition-colors"><i class="fa-solid fa-xmark"></i></button>
+          <h3 class="font-extrabold text-slate-800 text-base uppercase mb-4 tracking-wide"><i class="fa-solid fa-bell text-amber-500 mr-2"></i> PUSAT NOTIFIKASI</h3>
+          <div id="notifContent" class="space-y-3"></div>
+      </div>
+  </div>
+
+  <div id="installPromptModal" class="hidden fixed bottom-0 w-full bg-white rounded-t-3xl shadow-[0_-10px_40px_rgba(0,0,0,0.1)] z-[999] p-6 pb-safe animate-slide-up">
+      <div class="flex items-center space-x-4 mb-4">
+          <div class="w-14 h-14 bg-bpd-blue rounded-2xl flex items-center justify-center text-white text-2xl shadow-lg"><i class="fa-solid fa-rocket"></i></div>
+          <div><h3 class="font-black text-slate-800 text-lg">Install Super App</h3><p class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Akses lebih cepat & mendukung mode offline.</p></div>
+      </div>
+      <div class="flex space-x-3"><button onclick="document.getElementById('installPromptModal').classList.add('hidden')" class="flex-1 bg-slate-100 text-slate-600 font-bold py-3.5 rounded-xl text-sm uppercase">Nanti</button><button id="btnInstallAppConfirm" class="flex-1 bg-bpd-blue text-white font-black py-3.5 rounded-xl text-sm shadow-lg uppercase">Install Sekarang</button></div>
+  </div>
+
+  <div id="iosInstallModal" class="hidden fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-[999] flex items-end justify-center p-4 animate-fade-in">
+      <div class="bg-white w-full max-w-sm rounded-3xl p-6 shadow-2xl relative mb-4">
+          <button onclick="document.getElementById('iosInstallModal').classList.add('hidden')" class="absolute top-4 right-4 text-slate-400 bg-slate-100 rounded-full w-8 h-8 flex justify-center items-center hover:bg-slate-200"><i class="fa-solid fa-xmark"></i></button>
+          <div class="text-center mb-5"><div class="w-16 h-16 bg-bpd-blue rounded-2xl mx-auto flex items-center justify-center text-white text-3xl shadow-lg mb-3"><i class="fa-brands fa-apple"></i></div><h3 class="font-black text-slate-800 text-lg">Install di iPhone/iPad</h3><p class="text-[11px] font-bold text-slate-500 mt-1">Agar aplikasi dapat dibuka secara offline.</p></div>
+          <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100 mb-4">
+              <p class="text-xs font-bold text-slate-700 mb-3 flex items-center"><span class="bg-bpd-blue text-white w-5 h-5 rounded-full flex justify-center items-center mr-2 text-[10px]">1</span> Tekan tombol Share <i class="fa-solid fa-arrow-up-from-bracket mx-2 text-blue-500 text-lg"></i> di menu bawah Safari.</p>
+              <p class="text-xs font-bold text-slate-700 flex items-center"><span class="bg-bpd-blue text-white w-5 h-5 rounded-full flex justify-center items-center mr-2 text-[10px]">2</span> Geser ke bawah & pilih <b>"Add to Home Screen"</b> <i class="fa-solid fa-square-plus mx-2 text-slate-400 text-lg"></i></p>
+          </div>
+          <button onclick="document.getElementById('iosInstallModal').classList.add('hidden')" class="w-full bg-slate-200 text-slate-700 font-bold py-3.5 rounded-xl text-sm uppercase">Mengerti</button>
+      </div>
+  </div>
+
+  <div id="view-gateway" class="fixed inset-0 bg-bpd-blue z-[200] flex flex-col items-center justify-center p-6 animate-fade-in no-print">
+     <div class="text-center mb-8"><h1 class="text-5xl font-black text-white tracking-tight">CRM<span class="text-bpd-orange">PRO</span></h1><p class="text-blue-200 text-sm font-semibold tracking-widest mt-2 uppercase">Kolaborasi Perbankan</p></div>
+     <div class="w-full max-w-sm bg-white p-8 rounded-[2rem] shadow-2xl">
+        <label class="block text-xs font-extrabold text-slate-500 uppercase tracking-widest mb-3 text-center">Identitas Akses</label>
+        <div class="relative mb-3">
+            <i class="fa-solid fa-user-circle absolute left-4 top-[18px] text-bpd-blue text-lg"></i>
+            <select id="loginUserSelect" onchange="togglePinInput()" class="w-full p-4 pl-12 border-2 border-slate-100 rounded-2xl text-sm font-black text-slate-700 focus:border-bpd-blue outline-none appearance-none bg-slate-50"><option value="">MEMUAT DATA...</option></select>
+        </div>
+        <div id="wrapPin" class="relative mb-6 hidden">
+            <i class="fa-solid fa-lock absolute left-4 top-[18px] text-bpd-blue text-lg"></i>
+            <input type="password" id="loginPin" placeholder="PIN AKSES ADMIN" class="w-full p-4 pl-12 border-2 border-slate-100 rounded-2xl text-sm font-black text-slate-700 focus:border-bpd-blue outline-none bg-slate-50">
+        </div>
+        <button onclick="loginApp()" class="w-full bg-bpd-orange hover:bg-[#d95c14] active:scale-95 text-white font-black py-4 rounded-2xl shadow-lg transition-all text-sm tracking-widest flex justify-center items-center uppercase">MASUK SISTEM <i class="fa-solid fa-arrow-right ml-2"></i></button>
+     </div>
+  </div>
+
+  <div id="modalInfoStrategi" class="hidden fixed inset-0 bg-slate-900/70 backdrop-blur-sm z-[150] flex items-center justify-center p-4 animate-fade-in no-print">
+      <div class="bg-white rounded-3xl w-full max-w-sm p-6 shadow-2xl relative">
+          <button type="button" onclick="document.getElementById('modalInfoStrategi').classList.add('hidden')" class="absolute top-4 right-4 text-slate-400 bg-slate-100 rounded-full w-8 h-8 flex justify-center items-center hover:bg-slate-200 transition-colors"><i class="fa-solid fa-xmark"></i></button>
+          <h3 class="font-extrabold text-slate-800 text-base uppercase mb-4 tracking-wide"><i class="fa-solid fa-circle-info text-blue-500 mr-2"></i> PANDUAN STRATEGI</h3>
+          <div class="space-y-4 text-xs text-slate-600 font-medium">
+              <div class="bg-blue-50 p-4 rounded-xl border border-blue-100 shadow-sm"><p class="font-black text-blue-700 uppercase tracking-widest mb-1">UPSELLING</p><p class="leading-relaxed text-blue-900">Menawarkan produk yang <b>SESUAI</b> dengan jobdesk/role Anda.<br><br><b>Contoh:</b><br>• <b>Teller:</b> Upgrade saldo tabungan.<br>• <b>CS:</b> Upgrade deposito & tabungan.</p></div>
+              <div class="bg-indigo-50 p-4 rounded-xl border border-indigo-100 shadow-sm"><p class="font-black text-indigo-700 uppercase tracking-widest mb-1">CROSS SELLING</p><p class="leading-relaxed text-indigo-900">Menawarkan produk yang <b>DI LUAR</b> jobdesk Anda (Otomatis diarahkan ke Prospek & Wajib dioper ke rekan).<br><br><b>Contoh:</b><br>• <b>Teller:</b> Menawarkan buka rekening baru, kredit.<br>• <b>CS:</b> Menawarkan penambahan saldo di teller, kredit.</p></div>
+          </div>
+      </div>
+  </div>
+
+  <div id="modalInfoStatus" class="hidden fixed inset-0 bg-slate-900/70 backdrop-blur-sm z-[150] flex items-center justify-center p-4 animate-fade-in no-print">
+      <div class="bg-white rounded-3xl w-full max-w-sm p-6 shadow-2xl relative">
+          <button type="button" onclick="document.getElementById('modalInfoStatus').classList.add('hidden')" class="absolute top-4 right-4 text-slate-400 bg-slate-100 rounded-full w-8 h-8 flex justify-center items-center hover:bg-slate-200 transition-colors"><i class="fa-solid fa-xmark"></i></button>
+          <h3 class="font-extrabold text-slate-800 text-base uppercase mb-4 tracking-wide"><i class="fa-solid fa-tags text-amber-500 mr-2"></i> ARTI STATUS</h3>
+          <div class="space-y-3 text-xs">
+              <div class="bg-emerald-50 p-3 rounded-xl border border-emerald-100"><p class="font-black text-emerald-700 uppercase mb-1">🟢 CLOSING</p><p class="text-emerald-900">Penawaran <b>berhasil diterima</b> dan dieksekusi oleh nasabah.</p></div>
+              <div class="bg-amber-50 p-3 rounded-xl border border-amber-100"><p class="font-black text-amber-700 uppercase mb-1">🟡 PROSPEK</p><p class="text-amber-900">Penawaran sedang dipikirkan, <b>butuh follow up</b> atau sedang dilempar ke rekan (Cross-sell).</p></div>
+              <div class="bg-rose-50 p-3 rounded-xl border border-rose-100"><p class="font-black text-rose-700 uppercase mb-1">🔴 DITOLAK</p><p class="text-rose-900">Penawaran <b>ditolak tegas</b> oleh nasabah.</p></div>
+          </div>
+      </div>
+  </div>
+
+  <div id="modalKpiDetail" class="hidden fixed inset-0 bg-slate-900/70 backdrop-blur-sm z-[130] flex items-center justify-center p-4 animate-fade-in no-print">
+      <div class="bg-white rounded-3xl w-full max-w-sm p-6 shadow-2xl flex flex-col max-h-[90vh]">
+         <div class="flex justify-between items-center mb-4 border-b border-slate-100 pb-3">
+             <div><h3 class="font-black text-slate-800 text-base uppercase" id="modalKpiDetailTitle">DETAIL INTERAKSI</h3><p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">SINGLE CUSTOMER VIEW</p></div>
+             <button onclick="closeKpiDetail()" class="text-slate-400 hover:text-rose-500 bg-slate-100 rounded-full w-8 h-8 flex justify-center items-center transition-colors"><i class="fa-solid fa-xmark"></i></button>
+         </div>
+         <div id="modalKpiDetailContent" class="space-y-4 overflow-y-auto pr-2 pb-2"></div>
+      </div>
+  </div>
+
+  <div id="modalStaffStats" class="hidden fixed inset-0 bg-slate-900/70 backdrop-blur-sm z-[130] flex items-center justify-center p-4 animate-fade-in no-print">
+      <div class="bg-white rounded-3xl w-full max-w-sm p-6 shadow-2xl flex flex-col border-t-8 border-bpd-blue max-h-[90vh]">
+         <div class="flex justify-between items-start mb-4 border-b border-slate-100 pb-3 shrink-0">
+             <div><h3 class="font-black text-slate-800 text-lg uppercase" id="statStaffName">STAF</h3><p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest bg-slate-50 inline-block px-2 py-1 rounded mt-1" id="statStaffPeriode">PERIODE</p></div>
+             <button onclick="closeStaffStats()" class="text-slate-400 bg-slate-100 rounded-full w-8 h-8 flex justify-center items-center"><i class="fa-solid fa-xmark"></i></button>
+         </div>
+         <div class="overflow-y-auto pr-2 pb-2">
+             <div class="grid grid-cols-3 gap-2 mb-5">
+                 <div class="bg-emerald-50 rounded-xl p-3 text-center border border-emerald-100"><p class="text-[9px] font-extrabold text-emerald-600 uppercase mb-1">DEALS</p><p class="text-xl font-black text-emerald-700" id="statDeals">0</p></div>
+                 <div class="bg-amber-50 rounded-xl p-3 text-center border border-amber-100"><p class="text-[9px] font-extrabold text-amber-600 uppercase mb-1">PROSPEK</p><p class="text-xl font-black text-amber-700" id="statProspek">0</p></div>
+                 <div class="bg-rose-50 rounded-xl p-3 text-center border border-rose-100"><p class="text-[9px] font-extrabold text-rose-600 uppercase mb-1">LOST</p><p class="text-xl font-black text-rose-700" id="statLostDetail">0</p></div>
+             </div>
+             <h4 class="text-[11px] font-extrabold text-slate-500 uppercase tracking-widest mb-3 border-b border-slate-100 pb-1"><i class="fa-solid fa-chess-knight text-bpd-orange mr-1"></i> STRATEGI PENAWARAN</h4>
+             <div class="space-y-2 mb-5" id="statStaffStrategi"></div>
+             <h4 class="text-[11px] font-extrabold text-slate-500 uppercase tracking-widest mb-3 border-b border-slate-100 pb-1"><i class="fa-solid fa-medal text-bpd-blue mr-1"></i> PENGUASAAN PRODUK</h4>
+             <div id="statStaffProducts" class="space-y-4"></div>
+         </div>
+      </div>
+  </div>
+
+  <div id="modalStaffForm" class="hidden fixed inset-0 bg-slate-900/70 backdrop-blur-sm z-[130] flex items-center justify-center p-4 animate-fade-in no-print">
+     <div class="bg-white rounded-3xl w-full max-w-sm p-6 shadow-2xl">
+        <div class="flex justify-between items-center mb-4 border-b border-slate-100 pb-3 shrink-0"><h3 class="font-extrabold text-slate-800 text-base uppercase" id="staffFormTitle">FORM STAF</h3><button onclick="closeStaffForm()" class="text-slate-400 bg-slate-100 rounded-full w-8 h-8 flex justify-center items-center"><i class="fa-solid fa-xmark"></i></button></div>
+        <form id="formManageStaff" class="space-y-4">
+           <input type="hidden" id="staffFormAction" value="ADD"><input type="hidden" id="staffFormId" value="">
+           <div><label class="text-[10px] font-extrabold text-slate-500 uppercase tracking-widest mb-1.5 block">NAMA LENGKAP</label><input type="text" id="staffFormNama" required class="input-field w-full p-3.5 rounded-xl text-sm font-bold text-slate-700 uppercase"></div>
+           <div class="grid grid-cols-2 gap-3"><div><label class="text-[10px] font-extrabold text-slate-500 uppercase tracking-widest mb-1.5 block">HAK AKSES</label><select id="staffFormAkses" required class="input-field w-full p-3.5 rounded-xl text-sm font-bold text-slate-700 uppercase"><option value="USER">USER</option><option value="ADMIN">ADMIN</option></select></div><div><label class="text-[10px] font-extrabold text-slate-500 uppercase tracking-widest mb-1.5 block">PERIODE TARGET</label><select id="staffFormPeriode" class="input-field w-full p-3.5 rounded-xl text-sm font-bold text-slate-700 uppercase"><option value="Bulanan">BULANAN</option><option value="Mingguan">MINGGUAN</option></select></div></div>
+           <div><label class="text-[10px] font-extrabold text-slate-500 uppercase tracking-widest mb-1.5 block">TARGET DEALS</label><input type="number" id="staffFormTarget" value="0" required class="input-field w-full p-3.5 rounded-xl text-sm font-bold text-slate-700"></div>
+           <div class="pt-2"><button type="submit" id="btnStaffFormSubmit" class="w-full bg-bpd-blue text-white font-extrabold py-3.5 rounded-xl shadow-lg transition-all text-sm tracking-widest flex justify-center items-center uppercase"><span id="txtStaffFormSubmit">SIMPAN DATA</span><i id="spinStaffFormSubmit" class="fa-solid fa-circle-notch fa-spin hidden ml-2"></i></button></div>
+        </form>
+     </div>
+  </div>
+
+  <div id="modalProductForm" class="hidden fixed inset-0 bg-slate-900/70 backdrop-blur-sm z-[130] flex items-center justify-center p-4 animate-fade-in no-print">
+     <div class="bg-white rounded-3xl w-full max-w-sm p-6 shadow-2xl">
+        <div class="flex justify-between items-center mb-4 border-b border-slate-100 pb-3 shrink-0"><h3 class="font-extrabold text-slate-800 text-base uppercase" id="productFormTitle"><i class="fa-solid fa-cart-plus text-emerald-500 mr-2"></i>TAMBAH PRODUK</h3><button onclick="closeProductForm()" class="text-slate-400 bg-slate-100 rounded-full w-8 h-8 flex justify-center items-center"><i class="fa-solid fa-xmark"></i></button></div>
+        <form id="formManageProduct" class="space-y-4">
+           <input type="hidden" id="productFormAction" value="ADD"><input type="hidden" id="productFormId" value="">
+           <div><label class="text-[10px] font-extrabold text-slate-500 uppercase tracking-widest mb-1.5 block">NAMA PRODUK</label><input type="text" id="productFormNama" required class="input-field w-full p-3.5 rounded-xl text-sm font-bold text-slate-700 uppercase"></div>
+           <div><label class="text-[10px] font-extrabold text-slate-500 uppercase tracking-widest mb-1.5 block">KATEGORI</label><select id="productFormKategori" required class="input-field w-full p-3.5 rounded-xl text-sm font-bold text-slate-700 uppercase"><option value="KREDIT">KREDIT</option><option value="DANA">DANA (TABUNGAN/DEPOSITO)</option><option value="LAYANAN">LAYANAN / JASA</option><option value="LAINNYA">LAINNYA</option></select></div>
+           <div class="pt-2"><button type="submit" id="btnProductFormSubmit" class="w-full bg-bpd-blue text-white font-extrabold py-3.5 rounded-xl shadow-lg transition-all text-sm tracking-widest flex justify-center items-center uppercase"><span id="txtProductFormSubmit">SIMPAN DATA</span><i id="spinProductFormSubmit" class="fa-solid fa-circle-notch fa-spin hidden ml-2"></i></button></div>
+        </form>
+     </div>
+  </div>
+
+  <div id="modalJourney" class="hidden fixed inset-0 bg-slate-900/70 backdrop-blur-sm z-[110] flex items-center justify-center p-4 animate-fade-in no-print">
+     <div class="bg-white rounded-3xl w-full max-w-sm p-6 shadow-2xl max-h-[85vh] flex flex-col">
+        <div class="flex justify-between items-center mb-4 shrink-0 border-b border-slate-100 pb-3">
+           <h3 class="font-extrabold text-slate-800 text-base uppercase tracking-wider"><i class="fa-solid fa-route text-bpd-orange mr-2"></i>JEJAK NASABAH</h3>
+           <button onclick="closeJourney()" class="text-slate-400 bg-slate-100 rounded-full w-8 h-8 flex justify-center items-center"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div id="journeyHeader" class="mb-4 bg-slate-50 p-4 rounded-2xl border border-slate-200 shrink-0 uppercase"></div>
+        <div class="overflow-y-auto flex-1 pr-2"><div class="relative border-l-2 border-[#004A8D] opacity-80 ml-3 pl-5 space-y-5 py-2" id="journeyTimeline"></div></div>
+     </div>
+  </div>
+
+  <div id="modalUpdate" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[100] flex items-center justify-center p-4 animate-fade-in no-print">
+     <div class="bg-white rounded-3xl w-full max-w-sm p-6 shadow-2xl">
+        <h3 class="font-extrabold text-slate-800 text-lg mb-1 uppercase"><i class="fa-solid fa-pen-to-square text-bpd-blue mr-2"></i>TINDAK LANJUT PIPELINE</h3>
+        <p id="modalNasabahName" class="text-xs font-bold text-slate-400 mb-4 bg-slate-50 p-2 rounded-lg border border-slate-100 uppercase"></p>
+        <form id="formUpdate" class="space-y-4">
+           <input type="hidden" id="modalProdukTarget"><input type="hidden" id="modalNasabahInput"><input type="hidden" id="modalLat"><input type="hidden" id="modalLng">
+           <div><label class="text-[10px] font-extrabold text-slate-500 uppercase tracking-widest mb-1.5 block">NOMOR WHATSAPP <span id="reqHpUpdate" class="text-rose-500 hidden">*WAJIB</span></label><input type="tel" id="modalHpTarget" oninput="cekUpdateStatus()" placeholder="CONTOH: 08..." class="input-field w-full p-3.5 rounded-xl text-sm font-bold text-slate-700 uppercase"></div>
+           <div id="wrapUpdateFollowUp"><label class="text-[10px] font-extrabold text-emerald-500 uppercase tracking-widest mb-1.5 block"><i class="fa-regular fa-calendar mr-1"></i> JADWALKAN FOLLOW UP</label><input type="date" id="modalJadwalUpdate" name="jadwalFollowUpUpdate" class="input-field w-full p-3.5 rounded-xl text-sm font-bold text-emerald-700 bg-emerald-50 border-emerald-100"></div>
+           <div id="wrapUpdateDelegasi"><label class="text-[10px] font-extrabold text-indigo-500 uppercase tracking-widest mb-1.5 block"><i class="fa-solid fa-share-nodes mr-1"></i> OPER BOLA KE: (OPSIONAL)</label><select id="updateAssignee" name="assigneeId" class="input-field w-full p-3.5 rounded-xl text-sm font-bold text-indigo-700 bg-indigo-50 border-indigo-100 uppercase"></select></div>
+           <div><label class="text-[10px] font-extrabold text-slate-500 uppercase tracking-widest mb-1.5 block">STATUS PROGRESS</label><select id="modalStatus" onchange="cekUpdateStatus()" required class="input-field w-full p-3.5 rounded-xl text-sm font-bold text-slate-700 uppercase"><option value="PROSPEK">🟡 FOLLOW UP LAGI (TETAP PROSPEK)</option><option value="CLOSING">🟢 DEAL (CLOSING)</option><option value="DITOLAK">🔴 LOST (DITOLAK)</option></select></div>
+           <div><label class="text-[10px] font-extrabold text-slate-500 uppercase tracking-widest mb-1.5 block">CATATAN PROGRESS</label><textarea id="modalCatatan" required oninput="this.value = this.value.toUpperCase()" placeholder="CONTOH: TELEPON TIDAK DIANGKAT..." class="input-field w-full p-3.5 rounded-xl text-sm h-20 resize-none uppercase"></textarea></div>
+           <div class="flex space-x-3 pt-2"><button type="button" onclick="closeModalUpdate()" class="flex-1 bg-slate-100 text-slate-600 font-bold py-3 rounded-xl text-sm uppercase">BATAL</button><button type="submit" id="btnUpdateSubmit" class="flex-1 bg-bpd-blue text-white font-bold py-3 rounded-xl text-sm shadow-lg uppercase">SIMPAN UPDATE</button></div>
+        </form>
+     </div>
+  </div>
+
+  <div id="mainApp" class="hidden">
+      <div class="bg-bpd-blue text-white px-5 py-4 sticky top-0 z-40 flex justify-between items-center shadow-md no-print">
+        <div><h1 class="text-lg font-extrabold tracking-wide uppercase">CRM<span class="text-bpd-orange">PRO</span></h1><p id="headerWelcome" class="text-[10px] text-blue-200 font-medium uppercase tracking-widest mt-0.5">BANKALTIMTARA</p></div>
+        <div class="flex items-center space-x-3">
+            <button onclick="openGlobalSearch()" class="text-blue-100 hover:text-white transition-colors p-1"><i class="fa-solid fa-search text-lg"></i></button>
+            <button onclick="openNotifications()" class="text-blue-100 hover:text-white transition-colors relative p-1">
+                <i class="fa-solid fa-bell text-lg"></i>
+                <span id="notifBadge" class="hidden absolute top-0 right-0 bg-rose-500 w-2.5 h-2.5 rounded-full border border-bpd-blue shadow-sm pulse-red"></span>
+            </button>
+            <div onclick="logoutApp()" class="bg-[#003B73] border border-[#002D5A] px-3 py-1.5 rounded-full flex items-center shadow-inner cursor-pointer hover:bg-rose-600 transition-colors uppercase"><span id="headerRoleName" class="text-[10px] font-bold text-white uppercase truncate max-w-[80px] mr-2">NAMA</span><i class="fa-solid fa-right-from-bracket text-blue-200 text-[12px]"></i></div>
+        </div>
+      </div>
+
+      <div class="bg-white px-4 py-2.5 border-b border-slate-200 flex space-x-2 items-center justify-between shadow-sm sticky top-[62px] sm:top-[68px] z-30 no-print">
+          <div class="flex items-center space-x-1.5 flex-1"><input type="date" id="filterStart" class="text-[10px] font-bold text-slate-600 border border-slate-300 rounded px-2 py-1.5 w-full outline-none focus:border-bpd-blue"><span class="text-slate-400 text-[10px]">-</span><input type="date" id="filterEnd" class="text-[10px] font-bold text-slate-600 border border-slate-300 rounded px-2 py-1.5 w-full outline-none focus:border-bpd-blue"></div>
+          <button onclick="refreshDataServer()" class="bg-bpd-blue active:bg-[#003B73] text-white text-[10px] font-extrabold px-3 py-1.5 rounded shadow-md ml-2 transition-all"><i class="fa-solid fa-rotate-right"></i></button>
+          <button onclick="cetakPDF()" class="bg-rose-600 active:bg-rose-800 text-white text-[10px] font-extrabold px-3 py-1.5 rounded shadow-md ml-1 transition-all"><i class="fa-solid fa-file-pdf"></i></button>
+          <button onclick="exportCSV()" class="bg-emerald-600 active:bg-emerald-800 text-white text-[10px] font-extrabold px-3 py-1.5 rounded shadow-md ml-1 transition-all"><i class="fa-solid fa-file-csv"></i></button>
+      </div>
+
+      <main class="p-4 w-full max-w-md mx-auto no-print">
+        
+        <section id="view-input" class="view-section hidden animate-fade-in space-y-4">
+          <div class="bg-white p-6 rounded-3xl card-shadow">
+            <h2 class="text-sm font-extrabold text-bpd-blue mb-5 flex items-center uppercase tracking-wider"><i class="fa-solid fa-pen-to-square text-bpd-orange mr-2.5 text-lg"></i> INPUT PENAWARAN</h2>
+            <form id="formInput" class="space-y-4">
+              <input type="text" id="inputNasabah" name="nasabah" list="nasabahList" oninput="checkNasabahExisting(); this.value = this.value.toUpperCase();" placeholder="NAMA LENGKAP NASABAH" required autocomplete="off" class="input-field w-full p-4 rounded-2xl text-sm font-semibold text-slate-700 uppercase">
+              <datalist id="nasabahList"></datalist>
+              <div id="nasabahExistingAlert" class="hidden bg-emerald-50 border border-emerald-100 p-3 rounded-xl text-[10px] text-emerald-700 font-bold mb-3 shadow-sm uppercase"><i class="fa-solid fa-check-circle mr-1"></i> NASABAH DITEMUKAN. DATA AKAN DISINKRONKAN.</div>
+              <input type="tel" id="inputNoHp" name="noHp" placeholder="NOMOR WHATSAPP (OPSIONAL)" autocomplete="off" class="input-field w-full p-4 rounded-2xl text-sm font-semibold text-slate-700 uppercase">
+              <div class="grid grid-cols-2 gap-3">
+                <select name="produk" id="inputProdukSelect" required class="input-field w-full p-4 rounded-2xl text-sm font-semibold text-slate-600 uppercase"><option value="">PRODUK...</option></select>
+                <div>
+                   <div class="flex items-center justify-between mb-1 pl-1">
+                      <label class="text-[9px] font-extrabold text-slate-500 uppercase tracking-widest block">STRATEGI</label>
+                      <button type="button" onclick="document.getElementById('modalInfoStrategi').classList.remove('hidden')" class="text-blue-500 text-[10px] hover:text-blue-700 transition-colors"><i class="fa-solid fa-circle-question"></i> INFO</button>
+                   </div>
+                   <select name="jenis" id="inputJenis" onchange="cekJenis()" required class="input-field w-full p-3.5 rounded-xl text-sm font-semibold text-slate-600 uppercase" style="margin-top: 2px;">
+                       <option value="">PILIH...</option><option value="CROSS SELLING">CROSS SELLING</option><option value="UPSELLING">UPSELLING</option>
+                   </select>
+                </div>
+              </div>
+              <div class="grid grid-cols-2 gap-3">
+                 <select name="metode" id="metode" onchange="cekMetode()" required class="input-field w-full p-4 rounded-2xl text-sm font-semibold text-slate-600 uppercase"><option value="">METODE...</option><option value="TATAP MUKA">TATAP MUKA</option><option value="TELEPON">TELEPON</option><option value="WHATSAPP">WHATSAPP</option></select>
+                 <div>
+                   <div class="flex items-center justify-between mb-1 pl-1">
+                      <label class="text-[9px] font-extrabold text-slate-500 uppercase tracking-widest block">STATUS PROGRESS</label>
+                      <button type="button" onclick="document.getElementById('modalInfoStatus').classList.remove('hidden')" class="text-amber-500 text-[10px] hover:text-amber-700 transition-colors"><i class="fa-solid fa-circle-question"></i> INFO</button>
+                   </div>
+                   <select name="status" id="statusInput" onchange="cekStatus()" required class="input-field w-full p-3.5 rounded-xl text-sm font-bold text-slate-700 uppercase" style="margin-top: 2px;"><option value="PROSPEK">🟡 PROSPEK</option><option value="CLOSING">🟢 CLOSING</option><option value="DITOLAK">🔴 DITOLAK</option></select>
+                 </div>
+              </div>
+              <div id="wrapFollowUp" class="bg-emerald-50 border border-emerald-100 p-4 rounded-2xl space-y-2"><label class="text-[10px] font-extrabold text-emerald-500 uppercase tracking-widest block"><i class="fa-regular fa-calendar mr-1"></i> JADWALKAN FOLLOW UP</label><input type="date" name="jadwalFollowUp" id="inputJadwalFollowUp" class="input-field w-full p-3.5 rounded-xl text-sm font-bold text-emerald-700 bg-white"></div>
+              <div id="wrapDelegasi" class="bg-indigo-50 border border-indigo-100 p-4 rounded-2xl space-y-2"><label class="text-[10px] font-extrabold text-indigo-500 uppercase tracking-widest block"><i class="fa-solid fa-share-nodes mr-1"></i> OPER BOLA KE:</label><select id="inputAssignee" name="assigneeId" class="input-field w-full p-3.5 rounded-xl text-sm font-bold text-indigo-700 uppercase"></select></div>
+              
+              <div id="areaValidasi" class="bg-slate-50 border border-slate-200 p-4 rounded-2xl space-y-3 transition-all duration-300">
+                 <div id="wrapDurasi" class="hidden"><label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-1 block">DURASI TELEPON (DETIK)</label><input type="number" name="durasi" class="input-field w-full p-3 rounded-xl text-sm"></div>
+                 <div id="wrapUpload">
+                    <label id="labelUpload" class="text-[10px] font-bold text-rose-500 uppercase tracking-widest mb-1 block">BUKTI FOTO WAJIB (SEMUA METODE)</label>
+                    <div class="flex space-x-2 mb-2"><label class="flex-1 bg-white border border-bpd-blue text-bpd-blue text-xs font-bold py-2.5 rounded-xl text-center cursor-pointer hover:bg-blue-50 transition-colors uppercase"><i class="fa-solid fa-camera mr-1"></i> KAMERA<input type="file" id="fileCamera" accept="image/*" capture="environment" class="hidden" onchange="handleImageInput(this)"></label><label class="flex-1 bg-white border border-slate-300 text-slate-600 text-xs font-bold py-2.5 rounded-xl text-center cursor-pointer hover:bg-slate-50 transition-colors uppercase"><i class="fa-regular fa-image mr-1"></i> GALERI<input type="file" id="fileGallery" accept="image/*" class="hidden" onchange="handleImageInput(this)"></label></div>
+                    <p id="imageStatusText" class="text-[9px] text-slate-500 italic font-semibold">*PILIH SALAH SATU (OTOMATIS KOMPRES)</p>
+                    <img id="previewImg" class="hidden w-full h-32 object-cover rounded-xl mt-2 border border-slate-200 shadow-sm">
+                 </div>
+              </div>
+              
+              <textarea name="catatan" oninput="this.value = this.value.toUpperCase()" placeholder="CATATAN HASIL PENAWARAN..." class="input-field w-full p-4 rounded-2xl text-sm h-16 resize-none uppercase"></textarea>
+              <button type="submit" id="btnSubmit" class="w-full bg-bpd-blue active:scale-[0.98] text-white font-extrabold py-4 rounded-2xl shadow-lg transition-all text-sm tracking-widest uppercase flex justify-center items-center"><span id="btnText">SIMPAN DATA</span><i id="btnSpinner" class="fa-solid fa-circle-notch fa-spin hidden ml-2"></i></button>
+            </form>
+          </div>
+        </section>
+
+        <section id="view-pipeline" class="view-section hidden animate-fade-in space-y-4">
+          <div class="flex bg-white rounded-2xl card-shadow p-1"><button onclick="togglePipelineTab('aktif')" id="tabAktif" class="flex-1 tab-btn active">🔥 TUGAS SAYA</button><button onclick="togglePipelineTab('tunggu')" id="tabTunggu" class="flex-1 tab-btn">⏳ OPER KE REKAN</button></div>
+          <div id="pipeContentAktif" class="space-y-4"></div><div id="pipeContentTunggu" class="space-y-4 hidden"></div>
+        </section>
+
+        <section id="view-kpi" class="view-section hidden animate-fade-in space-y-4">
+          <div class="bg-gradient-to-br from-[#004A8D] to-[#002D5A] p-6 rounded-[2rem] shadow-xl text-white relative overflow-hidden cursor-pointer hover:shadow-2xl transition-all" onclick="openStaffStats(activeUser.id)">
+            <div class="absolute -right-8 -top-8 opacity-10 text-9xl text-bpd-orange"><i class="fa-solid fa-chart-line"></i></div>
+            <div class="flex justify-between items-start relative z-10"><h3 class="text-[10px] uppercase tracking-widest font-bold text-blue-200 mb-1" id="kpiTitle">TARGET PENCAPAIAN</h3><span class="text-[9px] bg-[#003B73] text-bpd-orange px-2 py-1 rounded font-bold uppercase"><i class="fa-solid fa-search-plus mr-1"></i>DETAIL</span></div>
+            <div class="flex items-end space-x-2 mb-5 mt-2 relative z-10"><span class="text-5xl font-black tracking-tighter" id="kpiClosing">0</span><span class="text-sm font-semibold text-blue-200 mb-1.5 uppercase">/ <span id="kpiTarget">0</span> (<span id="kpiPeriode">BLN</span>)</span></div>
+            <div class="w-full bg-[#002244] rounded-full h-3 mb-2 overflow-hidden shadow-inner border border-[#001A33] relative z-10"><div id="kpiProgress" class="bg-gradient-to-r from-bpd-orange to-[#F9A01B] h-full rounded-full progress-fill" style="width: 0%"></div></div>
+            <p class="text-xs text-blue-100 font-bold text-right tracking-wide relative z-10" id="kpiPercentage">0%</p>
+          </div>
+          
+          <div class="grid grid-cols-2 gap-4 mt-2">
+            <div onclick="openKpiDetail('TOTAL')" class="bg-white p-4 rounded-3xl card-shadow text-center border-b-4 border-bpd-blue cursor-pointer hover:-translate-y-1 transition-all"><div class="w-8 h-8 rounded-full bg-blue-50 text-bpd-blue flex items-center justify-center mx-auto mb-2"><i class="fa-solid fa-users text-sm"></i></div><p class="text-[9px] font-extrabold text-slate-400 uppercase tracking-widest mb-0.5">SEMUA NASABAH</p><h3 id="statTotal" class="text-xl font-black text-slate-800">0</h3></div>
+            <div onclick="openKpiDetail('LOST')" class="bg-white p-4 rounded-3xl card-shadow text-center border-b-4 border-rose-500 cursor-pointer hover:-translate-y-1 transition-all"><div class="w-8 h-8 rounded-full bg-rose-50 text-rose-500 flex items-center justify-center mx-auto mb-2"><i class="fa-solid fa-xmark text-sm"></i></div><p class="text-[9px] font-extrabold text-slate-400 uppercase tracking-widest mb-0.5">LOST LEADS</p><h3 id="statLost" class="text-xl font-black text-rose-500">0</h3></div>
+          </div>
+          
+          <div class="grid grid-cols-2 gap-4 mt-2 mb-4">
+            <div onclick="openKpiDetail('CROSS SELLING')" class="bg-indigo-50 p-4 rounded-3xl text-center border border-indigo-100 shadow-sm cursor-pointer hover:-translate-y-1 transition-all"><p class="text-[10px] font-extrabold text-indigo-500 uppercase tracking-widest mb-1">KARYA CROSS SELL</p><h3 id="kpiCS" class="text-3xl font-black text-indigo-700">0</h3></div>
+            <div onclick="openKpiDetail('UPSELLING')" class="bg-blue-50 p-4 rounded-3xl text-center border border-blue-100 shadow-sm cursor-pointer hover:-translate-y-1 transition-all"><p class="text-[10px] font-extrabold text-blue-500 uppercase tracking-widest mb-1">KARYA UP SELLING</p><h3 id="kpiUP" class="text-3xl font-black text-blue-700">0</h3></div>
+          </div>
+
+          <div class="bg-white p-5 rounded-3xl card-shadow mb-6">
+              <h3 class="font-extrabold text-bpd-blue mb-3 text-sm uppercase tracking-wider flex items-center"><i class="fa-solid fa-chart-area text-bpd-orange mr-2"></i> TREN CLOSING</h3>
+              <div class="w-full h-40"><canvas id="trendChart"></canvas></div>
+          </div>
+          <div id="leaderboardSection" class="hidden mt-6 pb-4">
+              <h3 class="font-extrabold text-bpd-blue mb-3 text-sm uppercase tracking-wider flex items-center"><i class="fa-solid fa-ranking-star text-bpd-orange mr-2 text-lg"></i> PERINGKAT TIM</h3>
+              <div id="hallOfFameCard" class="mb-3"></div>
+              <div id="leaderboardContainer" class="space-y-3"></div>
+          </div>
+        </section>
+
+        <section id="view-riwayat" class="view-section hidden animate-fade-in space-y-4">
+          <div class="bg-white p-4 rounded-3xl card-shadow mb-4 space-y-3 sticky top-[108px] z-20">
+             <div class="flex items-center justify-between px-1">
+                 <p class="text-[10px] font-extrabold text-slate-500 uppercase"><i class="fa-solid fa-filter text-bpd-blue mr-1"></i> FILTER RIWAYAT</p>
+                 <label class="text-[9px] font-bold text-slate-500 uppercase flex items-center cursor-pointer bg-slate-100 px-2 py-1 rounded"><input type="checkbox" id="toggleArsip" onchange="renderHistoryUI()" class="mr-1.5 w-3 h-3 text-bpd-blue"> Tampilkan Arsip (>90 Hari)</label>
+             </div>
+             <div class="grid grid-cols-2 gap-2 mt-2">
+                 <select id="filterRiwayatStaff" onchange="renderHistoryUI()" class="bg-slate-50 border border-slate-200 rounded-xl py-2 px-2 text-[9px] font-bold text-slate-600 outline-none focus:border-bpd-blue uppercase"></select>
+                 <select id="filterRiwayatProduk" onchange="renderHistoryUI()" class="bg-slate-50 border border-slate-200 rounded-xl py-2 px-2 text-[9px] font-bold text-slate-600 outline-none focus:border-bpd-blue uppercase"><option value="ALL">SEMUA PRODUK</option></select>
+                 <select id="filterRiwayatStatus" onchange="renderHistoryUI()" class="bg-slate-50 border border-slate-200 rounded-xl py-2 px-2 text-[9px] font-bold text-slate-600 outline-none focus:border-bpd-blue uppercase"><option value="ALL">SEMUA STATUS</option><option value="PROSPEK">🟡 PROSPEK</option><option value="CLOSING">🟢 CLOSING</option><option value="DITOLAK">🔴 DITOLAK</option></select>
+                 <select id="filterRiwayatJenis" onchange="renderHistoryUI()" class="bg-slate-50 border border-slate-200 rounded-xl py-2 px-2 text-[9px] font-bold text-slate-600 outline-none focus:border-bpd-blue uppercase"><option value="ALL">SEMUA STRATEGI</option><option value="CROSS SELLING">CROSS SELLING</option><option value="UPSELLING">UPSELLING</option></select>
+             </div>
+             <input type="hidden" id="filterSearchNasabah" value="">
+          </div>
+          <div id="riwayatContainer" class="space-y-4 pb-4"></div>
+        </section>
+
+        <section id="view-admin" class="view-section hidden animate-fade-in space-y-4">
+           <div class="flex bg-white rounded-2xl card-shadow p-1 mb-2 uppercase"><button onclick="toggleAdminTab('staf')" id="tabAdminStaf" class="flex-1 admin-tab active">MANAJEMEN STAF</button><button onclick="toggleAdminTab('produk')" id="tabAdminProduk" class="flex-1 admin-tab">KATALOG PRODUK</button></div>
+           <div id="adminContentStaf" class="space-y-4"><button onclick="openStaffForm('ADD')" class="w-full bg-emerald-50 text-emerald-600 border border-emerald-200 hover:bg-emerald-100 text-xs font-bold py-3 rounded-xl shadow-sm transition-colors uppercase"><i class="fa-solid fa-plus mr-1"></i> TAMBAH STAF BARU</button><div id="manageStaffContainer" class="space-y-3 pb-4"></div></div>
+           <div id="adminContentProduk" class="space-y-4 hidden"><button onclick="openProductForm('ADD')" class="w-full bg-indigo-50 text-indigo-600 border border-indigo-200 hover:bg-indigo-100 text-xs font-bold py-3 rounded-xl shadow-sm transition-colors uppercase"><i class="fa-solid fa-plus mr-1"></i> TAMBAH PRODUK BARU</button><div id="manageProductContainer" class="space-y-3 pb-4"></div></div>
+        </section>
+      </main>
+      <nav id="bottomNav" class="fixed bottom-0 w-full glass-nav flex justify-around items-center pb-safe pt-3 px-1 z-50 no-print"></nav>
+  </div>
+
+  <div id="printArea" class="hidden"></div>
+
+  <script>
+    const GAS_API_URL = "https://script.google.com/macros/s/AKfycbzzzBrxR0j3fJJHhGU4E1s1iqBljHvzUEk5mUtdEcmnrcNxDOEqOvQiuL9B_jlTgWWa/exec"; 
+
+    let isSubmittingAction = false; 
+    let optDelegasiFull = "";
+    let optDelegasiNoSelf = "";
+    let deferredPrompt = null;
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+        
+        if (!isStandalone) {
+            const isIos = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+            const isSafari = /Safari/.test(navigator.userAgent) && !/Chrome/.test(navigator.userAgent);
+
+            if (isIos && isSafari) {
+                setTimeout(() => { document.getElementById('iosInstallModal').classList.remove('hidden'); }, 3000);
+            } else {
+                window.addEventListener('beforeinstallprompt', (e) => {
+                    e.preventDefault(); deferredPrompt = e;
+                    setTimeout(() => { document.getElementById('installPromptModal').classList.remove('hidden'); }, 3000);
+                });
+            }
+        }
+    });
+    
+    document.getElementById('btnInstallAppConfirm').addEventListener('click', async () => {
+        if (deferredPrompt) {
+            deferredPrompt.prompt();
+            const { outcome } = await deferredPrompt.userChoice;
+            if (outcome === 'accepted') { document.getElementById('installPromptModal').classList.add('hidden'); }
+            deferredPrompt = null;
+        }
+    });
+
+    if ('serviceWorker' in navigator) { window.addEventListener('load', () => { navigator.serviceWorker.register('sw.js').catch(err => console.warn(err)); }); }
+
+    async function syncOfflineData() {
+        let queue = JSON.parse(localStorage.getItem('crm_offline_queue') || '[]');
+        if(queue.length === 0) return;
+        
+        let alertBox = document.getElementById('offlineAlert');
+        alertBox.innerHTML = '<i class="fa-solid fa-rotate fa-spin mr-1"></i> Menyinkronkan data offline...';
+        alertBox.classList.replace('bg-rose-500', 'bg-amber-500');
+        alertBox.classList.remove('hidden');
+
+        let failedQueue = [];
+        for (let item of queue) {
+            try {
+                let res = await fetch(GAS_API_URL, { method: "POST", body: JSON.stringify({ action: item.action, data: item.data }), headers: { "Content-Type": "text/plain;charset=utf-8" } });
+                let json = await res.json();
+                if(!json.success) throw new Error("Sync Fail");
+            } catch(e) { failedQueue.push(item); }
+        }
+        localStorage.setItem('crm_offline_queue', JSON.stringify(failedQueue));
+
+        if(failedQueue.length === 0) {
+            alertBox.innerHTML = '<i class="fa-solid fa-check mr-1"></i> Sinkronisasi Selesai';
+            alertBox.classList.replace('bg-amber-500', 'bg-emerald-500');
+            setTimeout(() => { 
+                alertBox.classList.add('hidden'); alertBox.classList.replace('bg-emerald-500', 'bg-rose-500'); alertBox.innerHTML = '<i class="fa-solid fa-wifi mr-1"></i> Mode Offline: Menunggu Koneksi Stabil'; 
+                if(activeUser.id !== '') refreshDataServer(); 
+            }, 3000);
+        } else {
+            alertBox.innerHTML = '<i class="fa-solid fa-triangle-exclamation mr-1"></i> Sebagian sinkronisasi gagal. Menunggu...';
+        }
+    }
+
+    window.addEventListener('online', () => { document.getElementById('offlineAlert').classList.add('hidden'); syncOfflineData(); });
+    window.addEventListener('offline', () => { document.getElementById('offlineAlert').classList.remove('hidden'); });
+
+    async function callGAS(actionName, dataPayload = {}) {
+      if (!navigator.onLine) { 
+          const mutasi = ["submitActivity", "updatePipelineStatus", "manageUserDb", "manageProductDb"];
+          if(mutasi.includes(actionName)) {
+              let q = JSON.parse(localStorage.getItem('crm_offline_queue') || '[]');
+              if(dataPayload.fileData && dataPayload.fileData.length > 500000) dataPayload.fileData = "OFFLINE_CACHE"; 
+              q.push({ action: actionName, data: dataPayload, time: Date.now() });
+              localStorage.setItem('crm_offline_queue', JSON.stringify(q));
+              alert("Koneksi terputus. Data diamankan di memori lokal & akan dikirim otomatis saat internet kembali.");
+              return true; 
+          } else { throw new Error("Anda sedang offline. Tidak dapat memuat laporan terbaru."); }
+      }
+      try {
+        const response = await fetch(GAS_API_URL, { method: "POST", body: JSON.stringify({ action: actionName, data: dataPayload }), headers: { "Content-Type": "text/plain;charset=utf-8" } });
+        const json = await response.json(); if (!json.success) throw new Error(json.msg); return json.data;
+      } catch (error) { alert("Server Error: " + error.message); throw error; }
+    }
+
+    let activeUser = { id: '', role: '', nama: '' }; let latitude = 0, longitude = 0; 
+    let printData = { stats: {}, activeTasks: [], delegatedTasks: [], history: [], leaderboard: [], uniqueNasabah: [], trendData: [], trendLabels: [] };
+    let allUsers = []; let allProducts = []; let compressedImageBase64 = null; let myChart = null;
+
+    function requestLocationUpdate() {
+        if(navigator.geolocation) { navigator.geolocation.getCurrentPosition( p => { latitude = p.coords.latitude; longitude = p.coords.longitude; }, e => { console.warn("GPS Alert:", e.message); }, { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 } ); }
+    }
+
+    function initGateway(initData) {
+       allUsers = initData.users; allProducts = initData.products;
+       let sel = document.getElementById('loginUserSelect'); let opts = "";
+       allUsers.forEach(u => { opts += '<option value="' + u.id + '|' + u.akses + '|' + u.nama + '">' + u.nama + ' (' + u.akses + ')</option>'; });
+       sel.innerHTML = opts || '<option value="">TIDAK ADA DATA STAF</option>';
+
+       optDelegasiFull = '<option value="SELF">👤 KERJAKAN SENDIRI</option>';
+       optDelegasiNoSelf = '<option value="">-- PILIH REKAN --</option>';
+       allUsers.forEach(u => { 
+           if(u.akses === "USER") {
+               let str = '<option value="' + u.id + '|' + u.nama + '">🤝 OPER KE: ' + u.nama + '</option>';
+               optDelegasiFull += str; optDelegasiNoSelf += str;
+           }
+       });
+       document.getElementById('inputAssignee').innerHTML = optDelegasiFull;
+       document.getElementById('updateAssignee').innerHTML = '<option value="NO_CHANGE">TAHAN DI SAYA</option>' + optDelegasiNoSelf.replace('<option value="">-- PILIH REKAN --</option>', '');
+
+       let optProdInput = '<option value="">-- PILIH PRODUK --</option>'; let optProdFilter = '<option value="ALL">SEMUA PRODUK</option>';
+       allProducts.forEach(p => { optProdInput += '<option value="' + p.nama + '">' + p.nama + '</option>'; optProdFilter += '<option value="' + p.nama + '">' + p.nama + '</option>'; });
+       document.getElementById('inputProdukSelect').innerHTML = optProdInput; document.getElementById('filterRiwayatProduk').innerHTML = optProdFilter;
+       renderManageProductUI();
+    }
+
+    function togglePinInput() {
+        const val = document.getElementById('loginUserSelect').value;
+        if(!val) { document.getElementById('wrapPin').classList.add('hidden'); return; }
+        const role = val.split('|')[1];
+        if(role === 'ADMIN') document.getElementById('wrapPin').classList.remove('hidden');
+        else document.getElementById('wrapPin').classList.add('hidden');
+    }
+
+    function loginApp() {
+      const val = document.getElementById('loginUserSelect').value; if(!val) return;
+      const parts = val.split('|'); 
+      const selectedRole = parts[1];
+      const pinInput = document.getElementById('loginPin').value;
+
+      if(selectedRole === 'ADMIN') {
+          if (pinInput !== '888888') {
+              alert('PIN AKSES OWNER/ADMIN SALAH!');
+              return;
+          }
+      }
+
+      activeUser = { id: parts[0], role: parts[1], nama: parts[2] };
+      document.getElementById('headerRoleName').innerText = activeUser.nama.split(' ')[0];
+      document.getElementById('kpiTitle').innerText = (activeUser.role === "ADMIN") ? "TARGET TIM" : "TARGET PRIBADI";
+      
+      renderNavigation();
+      if(activeUser.role === "ADMIN") { document.getElementById('leaderboardSection').classList.remove('hidden'); switchMenu('kpi'); } 
+      else { document.getElementById('leaderboardSection').classList.add('hidden'); switchMenu('input'); }
+      
+      let selRiwayat = document.getElementById('filterRiwayatStaff'); let optsRiwayat = '<option value="ALL">SEMUA STAF TERLIBAT</option>';
+      allUsers.forEach(u => { if(activeUser.role === "ADMIN" || u.id === activeUser.id) optsRiwayat += '<option value="' + u.id + '">' + u.nama + '</option>'; });
+      selRiwayat.innerHTML = optsRiwayat; document.getElementById('filterRiwayatStaff').value = "ALL";
+      document.getElementById('view-gateway').classList.add('hidden'); document.getElementById('mainApp').classList.remove('hidden');
+      
+      if(navigator.onLine) syncOfflineData();
+      refreshDataServer();
+    }
+
+    function logoutApp() { 
+        document.getElementById('mainApp').classList.add('hidden'); document.getElementById('view-gateway').classList.remove('hidden'); 
+        activeUser = { id: '', role: '', nama: '' }; document.getElementById('loginUserSelect').value = ""; document.getElementById('loginPin').value = "";
+    }
+
+    function openGlobalSearch() {
+        document.getElementById('modalGlobalSearch').classList.remove('hidden');
+        document.getElementById('globalSearchInput').focus();
+    }
+    function closeGlobalSearch() {
+        document.getElementById('modalGlobalSearch').classList.add('hidden');
+        document.getElementById('globalSearchInput').value = "";
+        document.getElementById('globalSearchResults').innerHTML = '<p class="text-center text-xs text-slate-300 font-bold tracking-widest mt-10">KETIK UNTUK MENCARI DATA...</p>';
+    }
+    function runGlobalSearch() {
+        let q = document.getElementById('globalSearchInput').value.toLowerCase().trim();
+        let resultsBox = document.getElementById('globalSearchResults');
+        if(q.length < 2) { resultsBox.innerHTML = '<p class="text-center text-xs text-slate-300 font-bold tracking-widest mt-10">KETIK MINIMAL 2 HURUF...</p>'; return; }
+        
+        let found = [];
+        printData.history.forEach((h, idx) => {
+            if(h.nasabah.toLowerCase().includes(q) || h.hp.includes(q)) {
+                found.push({ ...h, sourceIdx: idx, type: 'Riwayat' });
+            }
+        });
+        
+        if(found.length === 0) { resultsBox.innerHTML = '<p class="text-center text-xs text-rose-300 font-bold tracking-widest mt-10">TIDAK DITEMUKAN</p>'; return; }
+        
+        let html = "";
+        found.forEach(item => {
+            let badge = item.statusAkhir === "CLOSING" ? "text-emerald-500" : (item.statusAkhir === "PROSPEK" ? "text-amber-500" : "text-rose-500");
+            html += `<div onclick="closeGlobalSearch(); openJourney(${item.sourceIdx})" class="bg-white p-3 rounded-xl shadow-sm border border-slate-100 flex items-center justify-between cursor-pointer hover:border-bpd-blue transition-colors">
+                        <div><p class="text-xs font-black text-slate-800 uppercase">${item.nasabah}</p><p class="text-[9px] font-bold text-slate-400">${item.hp} | ${item.produk}</p></div>
+                        <div class="text-right"><span class="${badge} text-[9px] font-black uppercase">${item.statusAkhir}</span><br><span class="text-[8px] bg-slate-100 text-slate-500 px-1 rounded">${item.type}</span></div>
+                     </div>`;
+        });
+        resultsBox.innerHTML = html;
+    }
+
+    function openNotifications() {
+        document.getElementById('notifBadge').classList.add('hidden');
+        let content = document.getElementById('notifContent'); let html = "";
+        
+        let overdues = activeUser.role === 'ADMIN' ? printData.delegatedTasks.filter(p => p.overdue) : printData.activeTasks.filter(p => p.overdue);
+        let delegasiBaru = printData.delegatedTasks.length;
+
+        if(overdues.length > 0) {
+            html += `<div class="bg-rose-50 border border-rose-100 p-3 rounded-xl cursor-pointer" onclick="closeNotifications(); switchMenu('pipeline'); togglePipelineTab('${activeUser.role === 'ADMIN' ? 'tunggu' : 'aktif'}');"><p class="text-rose-600 font-black text-[11px] mb-1"><i class="fa-solid fa-triangle-exclamation mr-1"></i> ${overdues.length} NASABAH OVERDUE!</p><p class="text-[9px] text-rose-500 font-bold">Nasabah melewati jadwal follow-up.</p></div>`;
+        }
+        if(activeUser.role !== 'ADMIN' && delegasiBaru > 0) {
+            html += `<div class="bg-indigo-50 border border-indigo-100 p-3 rounded-xl cursor-pointer mt-2" onclick="closeNotifications(); switchMenu('pipeline'); togglePipelineTab('tunggu');"><p class="text-indigo-600 font-black text-[11px] mb-1"><i class="fa-solid fa-share-nodes mr-1"></i> ${delegasiBaru} DELEGASI MENUNGGU</p><p class="text-[9px] text-indigo-500 font-bold">Anda telah mengoper nasabah ke rekan.</p></div>`;
+        } else if (activeUser.role === 'ADMIN' && delegasiBaru > 0) {
+            html += `<div class="bg-indigo-50 border border-indigo-100 p-3 rounded-xl cursor-pointer mt-2" onclick="closeNotifications(); switchMenu('pipeline'); togglePipelineTab('tunggu');"><p class="text-indigo-600 font-black text-[11px] mb-1"><i class="fa-solid fa-users mr-1"></i> ${delegasiBaru} TUGAS TIM AKTIF</p><p class="text-[9px] text-indigo-500 font-bold">Pantau progress penawaran tim Anda.</p></div>`;
+        }
+
+        if(html === "") html = '<p class="text-center text-xs text-slate-400 font-bold tracking-widest py-6">TIDAK ADA NOTIFIKASI BARU</p>';
+        content.innerHTML = html; document.getElementById('modalNotif').classList.remove('hidden');
+    }
+    function closeNotifications() { document.getElementById('modalNotif').classList.add('hidden'); }
+
+    function renderNavigation() {
+        let nav = document.getElementById('bottomNav'); let html = '';
+        if(activeUser.role === 'ADMIN') {
+            html += '<button id="nav-kpi" onclick="switchMenu(\'kpi\')" class="nav-item flex flex-col items-center p-2"><i class="fa-solid fa-chart-pie text-[20px] mb-1.5"></i><span class="text-[9px] font-extrabold tracking-wide uppercase">KINERJA</span></button>';
+            html += '<button id="nav-pipeline" onclick="switchMenu(\'pipeline\')" class="nav-item flex flex-col items-center p-2 relative"><i class="fa-solid fa-users-viewfinder text-[20px] mb-1.5"></i><span class="text-[9px] font-extrabold tracking-wide uppercase">PANTAUAN</span><span id="navAlert" class="absolute top-1 right-[25%] bg-rose-500 w-2 h-2 rounded-full border border-white hidden shadow-sm"></span></button>';
+            html += '<button id="nav-riwayat" onclick="switchMenu(\'riwayat\')" class="nav-item flex flex-col items-center p-2"><i class="fa-solid fa-clock-rotate-left text-[20px] mb-1.5"></i><span class="text-[9px] font-extrabold tracking-wide uppercase">RIWAYAT</span></button>';
+            html += '<button id="nav-admin" onclick="switchMenu(\'admin\')" class="nav-item flex flex-col items-center p-2"><i class="fa-solid fa-server text-[20px] mb-1.5"></i><span class="text-[9px] font-extrabold tracking-wide uppercase">SISTEM</span></button>';
+        } else {
+            html += '<button id="nav-input" onclick="switchMenu(\'input\')" class="nav-item flex flex-col items-center p-2"><i class="fa-solid fa-keyboard text-[20px] mb-1.5"></i><span class="text-[9px] font-extrabold tracking-wide uppercase">INPUT</span></button>';
+            html += '<button id="nav-pipeline" onclick="switchMenu(\'pipeline\')" class="nav-item flex flex-col items-center p-2 relative"><i class="fa-solid fa-users-viewfinder text-[20px] mb-1.5"></i><span class="text-[9px] font-extrabold tracking-wide uppercase">TUGAS</span><span id="navAlert" class="absolute top-1 right-[25%] bg-rose-500 w-2.5 h-2.5 rounded-full border-2 border-white hidden shadow-md"></span></button>';
+            html += '<button id="nav-kpi" onclick="switchMenu(\'kpi\')" class="nav-item flex flex-col items-center p-2"><i class="fa-solid fa-chart-pie text-[20px] mb-1.5"></i><span class="text-[9px] font-extrabold tracking-wide uppercase">KINERJA</span></button>';
+            html += '<button id="nav-riwayat" onclick="switchMenu(\'riwayat\')" class="nav-item flex flex-col items-center p-2"><i class="fa-solid fa-clock-rotate-left text-[20px] mb-1.5"></i><span class="text-[9px] font-extrabold tracking-wide uppercase">RIWAYAT</span></button>';
+        }
+        nav.innerHTML = html;
+    }
+
+    function switchMenu(viewId) {
+      if(viewId === 'input') requestLocationUpdate();
+      document.querySelectorAll('.view-section').forEach(el => el.classList.add('hidden')); document.getElementById('view-' + viewId).classList.remove('hidden');
+      document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active')); document.getElementById('nav-' + viewId).classList.add('active');
+      if(viewId === 'admin') renderManageStaffUI(); else if(viewId !== 'input') refreshDataServer();
+    }
+
+    function togglePipelineTab(tipe) {
+        document.getElementById('tabAktif').classList.remove('active'); document.getElementById('tabTunggu').classList.remove('active');
+        document.getElementById('pipeContentAktif').classList.add('hidden'); document.getElementById('pipeContentTunggu').classList.add('hidden');
+        if(tipe === 'aktif') { document.getElementById('tabAktif').classList.add('active'); document.getElementById('pipeContentAktif').classList.remove('hidden'); } 
+        else { document.getElementById('tabTunggu').classList.add('active'); document.getElementById('pipeContentTunggu').classList.remove('hidden'); }
+    }
+
+    function toggleAdminTab(tipe) {
+        document.getElementById('tabAdminStaf').classList.remove('active'); document.getElementById('tabAdminProduk').classList.remove('active');
+        document.getElementById('adminContentStaf').classList.add('hidden'); document.getElementById('adminContentProduk').classList.add('hidden');
+        if(tipe === 'staf') { document.getElementById('tabAdminStaf').classList.add('active'); document.getElementById('adminContentStaf').classList.remove('hidden'); } 
+        else { document.getElementById('tabAdminProduk').classList.add('active'); document.getElementById('adminContentProduk').classList.remove('hidden'); }
+    }
+
+    function renderManageStaffUI() {
+        let cont = document.getElementById('manageStaffContainer'); let html = "";
+        allUsers.forEach(u => {
+            let badge = u.akses === 'ADMIN' ? 'bg-indigo-100 text-indigo-700' : 'bg-slate-100 text-slate-600';
+            html += '<div class="bg-white p-4 rounded-2xl card-shadow border border-slate-100 flex items-center justify-between"><div><p class="text-xs font-black text-slate-800 uppercase">' + u.nama + '</p><div class="flex items-center space-x-2 mt-1"><span class="text-[8px] ' + badge + ' px-1.5 py-0.5 rounded font-extrabold uppercase">' + u.akses + '</span>' + (u.akses === 'USER' ? '<span class="text-[8px] bg-bpd-blue/10 text-bpd-blue px-1.5 py-0.5 rounded font-bold">TARGET: ' + u.target + ' (' + u.periode + ')</span>' : '') + '</div></div><div class="flex space-x-1"><button onclick="openStaffForm(\'EDIT\', \'' + u.id + '\')" class="w-7 h-7 bg-amber-50 text-amber-500 rounded-lg flex items-center justify-center hover:bg-amber-100 transition-colors"><i class="fa-solid fa-pen text-xs"></i></button><button onclick="deleteStaff(\'' + u.id + '\', \'' + u.nama + '\')" class="w-7 h-7 bg-rose-50 text-rose-500 rounded-lg flex items-center justify-center hover:bg-rose-100 transition-colors"><i class="fa-solid fa-trash text-xs"></i></button></div></div>';
+        });
+        cont.innerHTML = html;
+    }
+
+    function renderManageProductUI() {
+        let cont = document.getElementById('manageProductContainer'); let html = "";
+        allProducts.forEach(p => { html += '<div class="bg-white p-4 rounded-2xl card-shadow border border-slate-100 flex items-center justify-between"><div><p class="text-xs font-black text-slate-800 uppercase">' + p.nama + '</p><p class="text-[9px] text-slate-500 font-bold uppercase tracking-widest mt-0.5"><i class="fa-solid fa-tag mr-1"></i>' + p.kategori + '</p></div><div class="flex space-x-1"><button onclick="openProductForm(\'EDIT\', \'' + p.id + '\')" class="w-7 h-7 bg-amber-50 text-amber-500 rounded-lg flex items-center justify-center hover:bg-amber-100 transition-colors"><i class="fa-solid fa-pen text-xs"></i></button><button onclick="deleteProduct(\'' + p.id + '\', \'' + p.nama + '\')" class="w-7 h-7 bg-rose-50 text-rose-500 rounded-lg flex items-center justify-center hover:bg-rose-100 transition-colors"><i class="fa-solid fa-trash text-xs"></i></button></div></div>'; });
+        if(cont) cont.innerHTML = html;
+    }
+
+    function openStaffForm(a, id = '') {
+        document.getElementById('staffFormAction').value = a; document.getElementById('staffFormId').value = id; document.getElementById('staffFormTitle').innerHTML = a === 'ADD' ? 'TAMBAH STAF' : 'EDIT STAF';
+        if(a === 'EDIT') { let u = allUsers.find(x => x.id === id); if(u) { document.getElementById('staffFormNama').value = u.nama; document.getElementById('staffFormAkses').value = u.akses; document.getElementById('staffFormPeriode').value = u.periode; document.getElementById('staffFormTarget').value = u.target; }
+        } else { document.getElementById('formManageStaff').reset(); } document.getElementById('modalStaffForm').classList.remove('hidden');
+    }
+    function closeStaffForm() { document.getElementById('modalStaffForm').classList.add('hidden'); }
+
+    function openProductForm(a, id = '') {
+        document.getElementById('productFormAction').value = a; document.getElementById('productFormId').value = id; document.getElementById('productFormTitle').innerHTML = a === 'ADD' ? '<i class="fa-solid fa-cart-plus text-emerald-500 mr-2"></i>TAMBAH PRODUK' : '<i class="fa-solid fa-pen text-amber-500 mr-2"></i>EDIT PRODUK';
+        if(a === 'EDIT') { let p = allProducts.find(x => x.id === id); if(p) { document.getElementById('productFormNama').value = p.nama; document.getElementById('productFormKategori').value = p.kategori; }
+        } else { document.getElementById('formManageProduct').reset(); } document.getElementById('modalProductForm').classList.remove('hidden');
+    }
+    function closeProductForm() { document.getElementById('modalProductForm').classList.add('hidden'); }
+
+    function deleteStaff(id, nama) { if(confirm("Yakin menghapus staf: " + nama + "?")) { if(isSubmittingAction) return; isSubmittingAction = true; callGAS("manageUserDb", { crudAction: 'DELETE', payload: {id: id} }).then(res => { initGateway(res.initData); renderManageStaffUI(); isSubmittingAction = false; }).catch(() => isSubmittingAction = false); } }
+    function deleteProduct(id, nama) { if(confirm("Yakin menghapus produk: " + nama + "?")) { if(isSubmittingAction) return; isSubmittingAction = true; callGAS("manageProductDb", { crudAction: 'DELETE', payload: {id: id} }).then(res => { initGateway(res.initData); renderManageProductUI(); isSubmittingAction = false; }).catch(() => isSubmittingAction = false); } }
+
+    function checkNasabahExisting() {
+        let val = document.getElementById('inputNasabah').value.toUpperCase().trim(); let match = printData.uniqueNasabah ? printData.uniqueNasabah.find(n => n.nama.toUpperCase() === val) : null;
+        if(match) { document.getElementById('nasabahExistingAlert').classList.remove('hidden'); let hpF = document.getElementById('inputNoHp'); hpF.value = match.hp; hpF.classList.add('border-emerald-400', 'bg-emerald-50'); setTimeout(() => { hpF.classList.remove('border-emerald-400', 'bg-emerald-50'); }, 1500);
+        } else { document.getElementById('nasabahExistingAlert').classList.add('hidden'); }
+    }
+
+    function cekJenis() {
+        const j = document.getElementById('inputJenis').value; const statusEl = document.getElementById('statusInput'); const assigneeEl = document.getElementById('inputAssignee');
+        if (j === 'UPSELLING') {
+            statusEl.innerHTML = '<option value="PROSPEK">🟡 PROSPEK</option><option value="CLOSING">🟢 CLOSING</option><option value="DITOLAK">🔴 DITOLAK</option>';
+            statusEl.value = 'CLOSING'; assigneeEl.innerHTML = optDelegasiFull; assigneeEl.value = 'SELF'; cekStatus(); 
+        } else if (j === 'CROSS SELLING') {
+            statusEl.innerHTML = '<option value="PROSPEK">🟡 PROSPEK</option>';
+            statusEl.value = 'PROSPEK'; assigneeEl.innerHTML = optDelegasiNoSelf; cekStatus();
+        } else {
+            statusEl.innerHTML = '<option value="PROSPEK">🟡 PROSPEK</option><option value="CLOSING">🟢 CLOSING</option><option value="DITOLAK">🔴 DITOLAK</option>';
+            assigneeEl.innerHTML = optDelegasiFull;
+        }
+    }
+
+    function cekStatus() {
+        const j = document.getElementById('inputJenis').value; const s = document.getElementById('statusInput').value; const hpInput = document.getElementById('inputNoHp'); const wrapFollowUp = document.getElementById('wrapFollowUp'); const wrapDelegasi = document.getElementById('wrapDelegasi'); const assigneeEl = document.getElementById('inputAssignee');
+        if(s === "PROSPEK") { 
+            wrapDelegasi.classList.remove('hidden'); wrapFollowUp.classList.remove('hidden'); hpInput.required = false; hpInput.placeholder = "NOMOR WHATSAPP (OPSIONAL)"; 
+            if(j === "CROSS SELLING") { assigneeEl.required = true; } else { assigneeEl.required = false; }
+        } else { 
+            wrapDelegasi.classList.add('hidden'); wrapFollowUp.classList.add('hidden'); assigneeEl.value = "SELF"; assigneeEl.required = false; document.getElementById('inputJadwalFollowUp').value = ""; hpInput.required = true; hpInput.placeholder = "NOMOR WHATSAPP (WAJIB)"; 
+        }
+    }
+
+    function cekUpdateStatus() {
+        const s = document.getElementById('modalStatus').value; const hpInput = document.getElementById('modalHpTarget'); const delWrap = document.getElementById('wrapUpdateDelegasi'); const followUpWrap = document.getElementById('wrapUpdateFollowUp'); const req = document.getElementById('reqHpUpdate');
+        if (s === "PROSPEK") { delWrap.classList.remove('hidden'); followUpWrap.classList.remove('hidden'); if(hpInput.value.trim() === "") { hpInput.required = true; req.classList.remove('hidden'); } else { hpInput.required = false; req.classList.add('hidden'); } 
+        } else { delWrap.classList.add('hidden'); followUpWrap.classList.add('hidden'); document.getElementById('updateAssignee').value = "NO_CHANGE"; document.getElementById('modalJadwalUpdate').value = ""; hpInput.required = true; req.classList.remove('hidden'); }
+    }
+
+    function cekMetode() {
+      const m = document.getElementById('metode').value; const wrapDurasi = document.getElementById('wrapDurasi');
+      document.getElementById('imageStatusText').innerText = "*PILIH SALAH SATU (OTOMATIS KOMPRES)"; document.getElementById('imageStatusText').classList.add('text-slate-500'); document.getElementById('imageStatusText').classList.remove('text-emerald-500');
+      if(m === 'TELEPON') { wrapDurasi.classList.remove('hidden'); } else { wrapDurasi.classList.add('hidden'); }
+    }
+
+    function compressImage(file, maxWidth, maxHeight, quality) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader(); reader.readAsDataURL(file);
+            reader.onload = event => { const img = new Image(); img.src = event.target.result; img.onload = () => { let w = img.width; let h = img.height; if (w > h) { if (w > maxWidth) { h = Math.round((h *= maxWidth / w)); w = maxWidth; } } else { if (h > maxHeight) { w = Math.round((w *= maxHeight / h)); h = maxHeight; } } const canv = document.createElement('canvas'); canv.width = w; canv.height = h; const ctx = canv.getContext('2d'); ctx.drawImage(img, 0, 0, w, h); resolve(canv.toDataURL('image/jpeg', quality)); }; img.onerror = e => reject(e); }; reader.onerror = e => reject(e);
+        });
+    }
+
+    async function handleImageInput(inputElement) {
+        const file = inputElement.files[0]; if(!file) return;
+        let statusTxt = document.getElementById('imageStatusText'); statusTxt.innerText = "MENGOMPRES FOTO..."; statusTxt.classList.remove('text-slate-500'); statusTxt.classList.add('text-amber-500');
+        try { compressedImageBase64 = await compressImage(file, 800, 800, 0.7); document.getElementById('previewImg').src = compressedImageBase64; document.getElementById('previewImg').classList.remove('hidden'); statusTxt.innerText = "✓ FOTO DISIAPKAN."; statusTxt.classList.remove('text-amber-500'); statusTxt.classList.add('text-emerald-500');
+        } catch (error) { statusTxt.innerText = "GAGAL MEMPROSES FOTO."; statusTxt.classList.add('text-rose-500'); }
+    }
+
+    function openModalUpdate(hp, produk, nasabah) {
+        requestLocationUpdate();
+        document.getElementById('modalHpTarget').value = hp !== "0" ? hp : ""; document.getElementById('modalProdukTarget').value = produk; document.getElementById('modalNasabahInput').value = nasabah; document.getElementById('modalNasabahName').innerText = nasabah; document.getElementById('modalStatus').value = "PROSPEK"; document.getElementById('modalCatatan').value = ""; document.getElementById('updateAssignee').value = "NO_CHANGE"; document.getElementById('modalLat').value = latitude; document.getElementById('modalLng').value = longitude; document.getElementById('modalJadwalUpdate').value = "";
+        cekUpdateStatus(); document.getElementById('modalUpdate').classList.remove('hidden');
+    }
+
+    function openKpiDetail(type) {
+        let title = ""; let rawList = [];
+        if (type === 'TOTAL') { title = "TOTAL NASABAH KELOLAAN RELEVAN"; rawList = printData.history; } 
+        else if (type === 'LOST') { title = "DETAIL LOST LEADS"; rawList = printData.history.filter(h => h.statusAkhir === 'DITOLAK'); }
+        else { title = "DETAIL STRATEGI: " + type; rawList = printData.history.filter(h => h.logs.some(log => log.jenis === type)); }
+
+        let grouped = {}; rawList.forEach(h => { if(!grouped[h.nasabah]) grouped[h.nasabah] = []; grouped[h.nasabah].push(h); });
+        let html = "";
+        if(Object.keys(grouped).length === 0) { html = "<p class='text-xs text-center text-slate-400 py-10 tracking-widest'>DATA KOSONG</p>"; } 
+        else {
+            for(let nsb in grouped) {
+                let caseHtml = "";
+                grouped[nsb].forEach(h => {
+                    let badgeClass = h.statusAkhir === "CLOSING" ? "text-emerald-600" : (h.statusAkhir === "PROSPEK" ? "text-amber-600" : "text-rose-600");
+                    caseHtml += '<div class="flex justify-between items-start border-t border-slate-100 mt-1.5 pt-1.5 cursor-pointer hover:bg-slate-100 p-1 rounded transition-colors" onclick="openJourneyByData(\''+h.hp+'\',\''+h.produk+'\')"><div class="flex-1 pr-2"><p class="text-[10px] font-black text-bpd-blue">' + h.produk + ' <span class="text-slate-400 font-normal">(' + h.tim + ')</span></p></div><span class="' + badgeClass + ' text-[9px] font-extrabold uppercase tracking-widest">' + h.statusAkhir + '</span></div>';
+                });
+                html += '<div class="bg-white p-3 rounded-xl border border-slate-200 mb-3 shadow-sm"><div class="flex justify-between items-center mb-1"><p class="text-xs font-black text-slate-800 uppercase"><i class="fa-solid fa-user-circle text-bpd-blue mr-1"></i> ' + nsb + '</p></div><p class="text-[9px] font-bold text-slate-500 mb-2">' + grouped[nsb][0].hp + '</p><div class="bg-slate-50 p-2 rounded-xl">' + caseHtml + '</div></div>';
+            }
+        }
+        document.getElementById('modalKpiDetailTitle').innerText = title; document.getElementById('modalKpiDetailContent').innerHTML = html; document.getElementById('modalKpiDetail').classList.remove('hidden');
+    }
+
+    function closeKpiDetail() { document.getElementById('modalKpiDetail').classList.add('hidden'); }
+    function openJourneyByData(hp, produk) { let idx = printData.history.findIndex(h => h.hp === hp && h.produk === produk); if(idx !== -1) { closeKpiDetail(); openJourney(idx); } }
+
+    function openJourney(index) {
+        let h = printData.history[index];
+        let headerHtml = '<p class="font-black text-slate-800 text-lg mb-0.5 uppercase">' + h.nasabah + '</p><div class="flex items-center space-x-2"><span class="text-[10px] bg-orange-100 text-bpd-orange px-2 py-1 rounded font-bold uppercase">' + h.produk + '</span><span class="text-[10px] font-bold text-slate-500"><i class="fa-brands fa-whatsapp text-emerald-500 mr-1"></i>' + h.hp + '</span></div>';
+        document.getElementById('journeyHeader').innerHTML = headerHtml; let timelineHtml = "";
+        h.logs.forEach(log => {
+            let badge = log.status === "CLOSING" ? "bg-emerald-500" : (log.status === "DITOLAK" ? "bg-rose-500" : "bg-amber-500");
+            let btnFoto = (log.bukti && log.bukti !== "No File" && log.bukti !== "OFFLINE_CACHE") ? '<a href="' + log.bukti + '" target="_blank" class="mt-2 inline-block bg-blue-50 text-bpd-blue text-[9px] font-bold px-2 py-1 rounded-md transition-colors hover:bg-blue-100 mr-1"><i class="fa-solid fa-image"></i> BUKTI</a>' : '';
+            let btnMaps = (log.maps && log.maps !== "") ? '<a href="' + log.maps + '" target="_blank" class="mt-2 inline-block bg-rose-50 text-rose-600 text-[9px] font-bold px-2 py-1 rounded-md transition-colors hover:bg-rose-100"><i class="fa-solid fa-location-dot"></i> LOKASI</a>' : '';
+            let labelJenis = '<span class="ml-1 text-[8px] bg-slate-200 text-slate-600 px-1 py-0.5 rounded">' + log.jenis + '</span>';
+            timelineHtml += '<div class="relative"><span class="absolute -left-[25px] top-2 w-3 h-3 rounded-full ' + badge + ' border-[3px] border-white shadow-sm"></span><div class="bg-slate-50 p-3 rounded-xl border border-slate-100 shadow-sm"><div class="flex justify-between items-start mb-1"><p class="text-[10px] font-black text-slate-800 uppercase">' + log.aktor + labelJenis + '</p><p class="text-[8px] font-bold text-slate-400">' + log.waktu + '</p></div><p class="text-[11px] font-semibold text-slate-600 leading-relaxed uppercase">' + log.catatan + '</p>' + btnFoto + btnMaps + '</div></div>';
+        });
+        document.getElementById('journeyTimeline').innerHTML = timelineHtml; document.getElementById('modalJourney').classList.remove('hidden');
+    }
+    function closeJourney() { document.getElementById('modalJourney').classList.add('hidden'); }
+
+    function openStaffStats(idUser) {
+        let staff = printData.leaderboard.find(s => s.id === idUser); if(!staff) return;
+        document.getElementById('statStaffName').innerText = staff.nama; document.getElementById('statStaffPeriode').innerText = "TARGET " + staff.periode.toUpperCase() + ": " + staff.target;
+        document.getElementById('statDeals').innerText = staff.closing; document.getElementById('statProspek').innerText = staff.prospek; document.getElementById('statLostDetail').innerText = staff.ditolak;
+
+        let totalJenis = staff.jenisMap['CROSS SELLING'] + staff.jenisMap['UPSELLING']; let htmlJenis = "";
+        if(totalJenis === 0) { htmlJenis = "<p class='text-[10px] text-slate-400 italic text-center'>BELUM ADA DATA STRATEGI.</p>"; } 
+        else { let pCS = Math.round((staff.jenisMap['CROSS SELLING']/totalJenis)*100) || 0; let pUP = Math.round((staff.jenisMap['UPSELLING']/totalJenis)*100) || 0; htmlJenis = '<div class="flex h-4 rounded-full overflow-hidden text-[8px] text-white font-bold text-center">' + (pCS > 0 ? '<div style="width:'+pCS+'%" class="bg-indigo-500 flex items-center justify-center">CS</div>' : '') + (pUP > 0 ? '<div style="width:'+pUP+'%" class="bg-bpd-blue flex items-center justify-center">UP</div>' : '') + '</div><div class="flex justify-between mt-1 text-[8px] text-slate-500 font-bold"><span>CS: '+pCS+'%</span><span>UP: '+pUP+'%</span></div>'; }
+        document.getElementById('statStaffStrategi').innerHTML = htmlJenis;
+
+        let htmlProd = "";
+        if(!staff.produkList || staff.produkList.length === 0) { htmlProd = "<p class='text-xs text-center text-slate-400 py-10'>BELUM ADA INTERAKSI.</p>"; } 
+        else { staff.produkList.forEach(p => { htmlProd += '<div class="mb-4 animate-slide-up"><div class="flex justify-between text-[11px] font-bold text-slate-600 mb-1.5 uppercase"><span>' + p.nama + ' (' + p.count + ' NSB)</span><span class="text-bpd-blue font-black">' + p.perc + '%</span></div><div class="w-full bg-slate-100 rounded-full h-2"><div class="bg-bpd-blue h-2 rounded-full" style="width: ' + p.perc + '%"></div></div></div>'; }); }
+        document.getElementById('statStaffProducts').innerHTML = htmlProd; document.getElementById('modalStaffStats').classList.remove('hidden');
+    }
+    function closeStaffStats() { document.getElementById('modalStaffStats').classList.add('hidden'); }
+    function closeModalUpdate() { document.getElementById('modalUpdate').classList.add('hidden'); }
+
+    function refreshDataServer() {
+      if(!navigator.onLine) return; 
+      let startD = document.getElementById('filterStart').value; let endD = document.getElementById('filterEnd').value;
+      const c1 = document.getElementById('pipeContentAktif'); const c2 = document.getElementById('pipeContentTunggu'); const c3 = document.getElementById('riwayatContainer'); const c4 = document.getElementById('leaderboardContainer');
+      const c5 = document.getElementById('hallOfFameCard');
+      const l = '<div class="text-center py-10"><i class="fa-solid fa-circle-notch fa-spin text-bpd-blue text-3xl"></i></div>';
+      c1.innerHTML=l; c2.innerHTML=l; c3.innerHTML=l; if(activeUser.role==="ADMIN") { c4.innerHTML=l; c5.innerHTML=""; }
+      
+      callGAS("getDashboardData", { userId: activeUser.id, userAkses: activeUser.role, startStr: startD, endStr: endD })
+      .then(data => {
+        printData = data; 
+        let htmlDl = ""; data.uniqueNasabah.forEach(n => { htmlDl += '<option value="' + n.nama + '">'; }); document.getElementById('nasabahList').innerHTML = htmlDl;
+
+        const s = data.stats;
+        document.getElementById('kpiClosing').innerText = s.closing; document.getElementById('kpiTarget').innerText = s.target; document.getElementById('kpiPeriode').innerText = s.periodeTarget; 
+        let countCS = 0, countUP = 0; data.history.forEach(h => { if(h.logs.some(l => l.jenis === 'CROSS SELLING')) countCS++; if(h.logs.some(l => l.jenis === 'UPSELLING')) countUP++; });
+        document.getElementById('kpiCS').innerText = countCS; document.getElementById('kpiUP').innerText = countUP;
+
+        let totalUniqueNasabah = Object.keys(data.history.reduce((acc, obj) => { acc[obj.nasabah] = true; return acc; }, {})).length;
+        document.getElementById('statTotal').innerText = totalUniqueNasabah; document.getElementById('statLost').innerText = s.ditolak;
+        
+        let percentage = s.target === 0 ? 0 : (s.closing / s.target) * 100; if(percentage > 100) percentage = 100;
+        setTimeout(() => { document.getElementById('kpiProgress').style.width = percentage + "%"; }, 100); document.getElementById('kpiPercentage').innerText = percentage.toFixed(0) + "%";
+
+        if(document.getElementById('trendChart')) {
+            let ctx = document.getElementById('trendChart'); if(myChart) { myChart.destroy(); }
+            myChart = new Chart(ctx, { type: 'line', data: { labels: data.trendLabels, datasets: [{ label: 'DEALS BERHASIL', data: data.trendData, backgroundColor: 'rgba(0, 74, 141, 0.1)', borderColor: '#004A8D', borderWidth: 3, pointBackgroundColor: '#F37021', pointBorderColor: '#fff', pointBorderWidth: 2, pointRadius: 4, fill: true, tension: 0.4 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { precision: 0 } }, x: { grid: { display: false } } } } });
+        }
+
+        let htmlA = "";
+        data.activeTasks.forEach((p, idx) => {
+          let hpLink = p.hp ? p.hp : "0"; const waMessage = encodeURIComponent("Halo Bapak/Ibu " + p.nasabah + ", saya " + activeUser.nama + " dari Bankaltimtara. Izin menindaklanjuti..."); const waLink = "https://wa.me/" + hpLink + "?text=" + waMessage;
+          let tagPetugas = activeUser.role === "ADMIN" ? '<div class="mb-4"><span class="text-[9px] bg-slate-100 text-slate-500 px-2.5 py-1.5 rounded-md font-extrabold uppercase tracking-widest"><i class="fa-solid fa-user-tag mr-1"></i> DIPEGANG: ' + p.picSekarang + '</span></div>' : '';
+          let btnChatHtml = (hpLink !== "0") ? '<a href="' + waLink + '" target="_blank" class="flex-1 text-center bg-emerald-50 text-emerald-600 hover:bg-emerald-100 text-[10px] font-black py-2.5 rounded-xl uppercase transition-all shadow-sm"><i class="fa-brands fa-whatsapp mr-1.5 text-sm"></i> CHAT</a>' : '<button type="button" disabled class="flex-1 text-center bg-slate-100 text-slate-400 text-[10px] font-black py-2.5 rounded-xl uppercase shadow-sm cursor-not-allowed">WA KOSONG</button>';
+          let alertBorder = "border-l-[5px] border-l-amber-400"; let overdueAnim = ""; let textJadwal = '<span class="text-slate-400"><i class="fa-regular fa-calendar-days mr-1"></i> ' + p.jadwal + '</span>';
+          if(p.overdue) { alertBorder = "border-2 border-rose-400 shadow-md"; overdueAnim = "pulse-red"; textJadwal = '<span class="text-rose-500 font-black"><i class="fa-solid fa-triangle-exclamation mr-1"></i> TELAT (' + p.jadwal + ')</span>'; }
+          let slaAging = p.aging > 7 ? '<span class="text-rose-500 font-bold ml-2">(' + p.aging + ' HARI)</span>' : '<span class="text-slate-400 font-bold ml-2">(' + p.aging + ' HARI)</span>';
+          
+          let safeNasabah = p.nasabah.replace(/'/g, "\\'").replace(/"/g, "&quot;"); let safeProduk = p.produk.replace(/'/g, "\\'").replace(/"/g, "&quot;");
+
+          htmlA += '<div class="bg-white p-5 rounded-3xl card-shadow ' + alertBorder + ' ' + overdueAnim + ' relative"><div class="absolute top-4 right-4 text-[9px] font-extrabold">' + textJadwal + '</div><p class="text-[15px] font-black text-slate-800 mb-0.5 tracking-tight pr-20 uppercase">' + p.nasabah + '</p><p class="text-[11px] font-bold text-bpd-blue mb-3 uppercase tracking-widest"><i class="fa-solid fa-cube mr-1"></i> ' + p.produk + slaAging + '</p>' + tagPetugas + '<div class="mt-2 border-t border-slate-100 pt-3 flex justify-between items-center space-x-2"><button onclick="openModalUpdate(\'' + hpLink + '\', \'' + safeProduk + '\', \'' + safeNasabah + '\')" class="flex-1 bg-blue-50 text-bpd-blue text-[10px] font-black py-2.5 rounded-xl uppercase transition-all shadow-sm"><i class="fa-solid fa-check-double mr-1.5"></i> UPDATE</button>' + btnChatHtml + '</div></div>';
+        });
+        
+        let htmlT = "";
+        data.delegatedTasks.forEach((p, idx) => {
+          let textJadwal = p.overdue ? '<span class="text-rose-500 font-black"><i class="fa-solid fa-triangle-exclamation mr-1"></i> ' + p.jadwal + '</span>' : '<span class="text-slate-400">' + p.jadwal + '</span>';
+          let alertBorder = p.overdue ? "border-l-[5px] border-l-rose-400" : "border-l-[5px] border-l-slate-300";
+          let actionBtn = "";
+          
+          if(activeUser.role === 'ADMIN') {
+              let hpLink = p.hp ? p.hp : "0";
+              let safeNasabahDel = p.nasabah.replace(/'/g, "\\'").replace(/"/g, "&quot;"); let safeProdukDel = p.produk.replace(/'/g, "\\'").replace(/"/g, "&quot;");
+              actionBtn = `<div class="mt-2 border-t border-slate-100 pt-3"><button onclick="openModalUpdate('${hpLink}', '${safeProdukDel}', '${safeNasabahDel}')" class="w-full bg-blue-50 hover:bg-blue-100 text-bpd-blue text-[10px] font-black py-2.5 rounded-xl uppercase transition-all shadow-sm"><i class="fa-solid fa-check-double mr-1.5"></i> INTERVENSI / UPDATE</button></div>`;
+              alertBorder = p.overdue ? "border-2 border-rose-400 shadow-md pulse-red" : "border-l-[5px] border-l-slate-400";
+          }
+
+          htmlT += '<div class="bg-white p-5 rounded-3xl card-shadow ' + alertBorder + ' relative"><div class="absolute top-4 right-4 text-[9px] font-extrabold">' + textJadwal + '</div><p class="text-[15px] font-black text-slate-800 mb-0.5 tracking-tight pr-16 uppercase">' + p.nasabah + '</p><p class="text-[11px] font-bold text-slate-500 mb-3 uppercase tracking-widest"><i class="fa-solid fa-cube mr-1"></i> ' + p.produk + '</p><div class="bg-slate-100 p-2.5 rounded-xl text-[10px] font-extrabold text-slate-500 flex items-center"><i class="fa-solid fa-user-clock mr-2 text-lg"></i> DIPEGANG OLEH:<br>' + p.picSekarang + '</div>' + actionBtn + '</div>';
+        });
+
+        c1.innerHTML = htmlA || '<div class="text-center py-10"><div class="w-16 h-16 bg-emerald-50 rounded-full flex items-center justify-center mx-auto text-emerald-500 text-2xl mb-2"><i class="fa-solid fa-check"></i></div><p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">SEMUA TUGAS SELESAI</p></div>';
+        c2.innerHTML = htmlT || '<div class="text-center py-10 text-slate-400 text-[10px] font-bold uppercase tracking-widest">TIDAK ADA DATA</div>';
+        
+        let overdueCount = activeUser.role === 'ADMIN' ? data.delegatedTasks.filter(t => t.overdue).length : data.activeTasks.filter(t => t.overdue).length;
+        if(overdueCount > 0 || data.delegatedTasks.length > 0) { document.getElementById('notifBadge').classList.remove('hidden'); } else { document.getElementById('notifBadge').classList.add('hidden'); }
+        if(data.activeTasks.length > 0) { document.getElementById('navAlert').classList.remove('hidden'); document.getElementById('tabAktif').innerHTML = '🔥 TUGAS (' + data.activeTasks.length + ')'; } else { document.getElementById('navAlert').classList.add('hidden'); document.getElementById('tabAktif').innerHTML = '🔥 TUGAS SAYA'; }
+        if(data.delegatedTasks.length > 0) { let title = activeUser.role === 'ADMIN' ? '⏳ TUGAS TIM (' : '⏳ TUNGGU REKAN ('; document.getElementById('tabTunggu').innerHTML = title + data.delegatedTasks.length + ')'; } else { document.getElementById('tabTunggu').innerHTML = activeUser.role === 'ADMIN' ? '⏳ TUGAS TIM' : '⏳ OPER KE REKAN'; }
+
+        renderHistoryUI();
+        if(activeUser.role === "ADMIN") {
+            let ldbHtml = ""; let rank = 2; 
+            if(data.leaderboard && data.leaderboard.length > 0) {
+                let champ = data.leaderboard[0];
+                let champPercent = champ.target === 0 ? 0 : (champ.closing / champ.target) * 100;
+                let champBadgeHtml = "";
+                if(champ.badges && champ.badges.length > 0) { champ.badges.forEach(b => { champBadgeHtml += '<span class="text-[8px] bg-white/20 text-white px-2 py-1 rounded font-bold mr-1"><i class="fa-solid ' + b.icon + '"></i> ' + b.text + '</span>'; }); }
+                
+                let hofHtml = `<div class="bg-gradient-to-tr from-amber-400 to-yellow-500 p-5 rounded-[2rem] shadow-[0_10px_20px_rgba(245,158,11,0.3)] text-white flex items-center cursor-pointer animate-slide-up border-2 border-yellow-300" onclick="openStaffStats('${champ.id}')"><div class="relative w-14 h-14 bg-white rounded-2xl flex items-center justify-center font-black text-2xl text-amber-500 shadow-inner shrink-0 mr-4"><i class="fa-solid fa-trophy"></i><span class="absolute -bottom-2 -right-2 bg-rose-500 text-white text-[9px] px-1.5 py-0.5 rounded-md border-2 border-yellow-400 font-extrabold">#1</span></div><div class="flex-1"><p class="text-[9px] font-black tracking-widest uppercase mb-0.5 text-yellow-100">🏆 HALL OF FAME BULAN INI</p><p class="text-sm font-black uppercase mb-1 drop-shadow-sm">${champ.nama}</p><div class="mb-2">${champBadgeHtml}</div><p class="text-[10px] font-black uppercase tracking-widest text-yellow-50">⭐ ${champ.poin} POIN <span class="font-bold opacity-80 mx-1">|</span> ${champ.closing} DEALS</p></div><div class="ml-2 text-right"><p class="text-xl font-black leading-none drop-shadow-sm">${Math.round(champPercent)}%</p></div></div>`;
+                c5.innerHTML = hofHtml;
+
+                for(let i=1; i<data.leaderboard.length; i++) {
+                    let staff = data.leaderboard[i];
+                    let staffPercent = staff.target === 0 ? 0 : (staff.closing / staff.target) * 100; let badgeHtml = "";
+                    if(staff.badges && staff.badges.length > 0) { staff.badges.forEach(b => { badgeHtml += '<span class="text-[8px] ' + b.class + ' px-1.5 py-0.5 rounded font-bold mr-1"><i class="fa-solid ' + b.icon + '"></i> ' + b.text + '</span>'; }); }
+                    let rankBadge = rank === 2 ? 'bg-slate-200 text-slate-600' : 'bg-orange-100 text-orange-600'; if(rank > 3) rankBadge = 'bg-slate-50 text-slate-400';
+                    ldbHtml += '<div class="bg-white p-4 rounded-3xl card-shadow flex items-center cursor-pointer hover:border-bpd-blue border border-transparent transition-all animate-slide-up" onclick="openStaffStats(\'' + staff.id + '\')"><div class="' + rankBadge + ' w-8 h-8 rounded-full flex items-center justify-center font-black text-xs shadow-sm shrink-0 mr-3">#' + rank + '</div><div class="flex-1"><p class="text-xs font-black text-slate-800 uppercase mb-0.5">' + staff.nama + '</p><div class="mb-1.5">' + badgeHtml + '</div><div class="w-full bg-slate-100 rounded-full h-1.5 mb-1"><div class="bg-bpd-blue h-1.5 rounded-full" style="width: ' + staffPercent + '%"></div></div><p class="text-[10px] font-black text-slate-500 uppercase mt-1">⭐ ' + staff.poin + ' POIN <span class="font-bold text-[9px] ml-1 text-slate-400">| ' + staff.closing + ' DEALS</span> <span class="ml-2 text-[9px] text-indigo-400 font-extrabold">CS:' + staff.jenisMap['CROSS SELLING'] + ' UP:' + staff.jenisMap['UPSELLING'] + '</span></p></div><div class="ml-3 text-right"><p class="text-lg font-black text-emerald-500 leading-none">' + Math.round(staffPercent) + '%</p></div></div>'; rank++;
+                }
+            }
+            c4.innerHTML = ldbHtml || '<p class="text-[10px] text-center">DATA KOSONG</p>';
+        }
+      });
+    }
+
+    function renderHistoryUI() {
+        const cont = document.getElementById('riwayatContainer'); 
+        const filterId = document.getElementById('filterRiwayatStaff').value; 
+        const filterProd = document.getElementById('filterRiwayatProduk').value; 
+        const filterStatus = document.getElementById('filterRiwayatStatus').value; 
+        const filterJenis = document.getElementById('filterRiwayatJenis').value; 
+        const search = ""; 
+        const showArchive = document.getElementById('toggleArsip').checked;
+
+        if(!printData.history || printData.history.length === 0) { cont.innerHTML = '<p class="text-center text-xs py-10">TIDAK ADA RIWAYAT</p>'; return; }
+        
+        let grouped = {}; let resultCount = 0; let globalIndex = 0;
+        const now = new Date().getTime(); const ninetyDays = 90 * 24 * 60 * 60 * 1000;
+
+        printData.history.forEach(h => {
+            let passed = true;
+            if(filterId !== "ALL" && !h.tim.includes(allUsers.find(u => u.id === filterId)?.nama)) passed = false;
+            if(filterProd !== "ALL" && h.produk !== filterProd) passed = false;
+            if(filterStatus !== "ALL" && h.statusAkhir !== filterStatus) passed = false;
+            if(filterJenis !== "ALL") { let hasJenis = h.logs.some(log => log.jenis === filterJenis); if(!hasJenis) passed = false; }
+            
+            let lastLogDate = h.logs.length > 0 ? new Date(h.logs[h.logs.length-1].waktu).getTime() : 0;
+            if (isNaN(lastLogDate)) lastLogDate = now;
+            let isArchived = (now - lastLogDate) > ninetyDays;
+
+            if (isArchived && !showArchive) passed = false;
+            if (!isArchived && showArchive) passed = false; 
+
+            h.originalIndex = globalIndex; globalIndex++;
+            if(passed) { if(!grouped[h.nasabah]) grouped[h.nasabah] = []; grouped[h.nasabah].push(h); resultCount++; }
+        });
+
+        if (resultCount === 0) { 
+            let msg = showArchive ? "TIDAK ADA DATA ARSIP (> 90 HARI)" : "DATA FILTER TIDAK DITEMUKAN";
+            cont.innerHTML = `<p class="text-center text-xs py-10 text-slate-400 font-bold tracking-widest">${msg}</p>`; 
+            return; 
+        }
+        
+        let html = ""; let dly = 0;
+        for(let nasabah in grouped) {
+            let archiveBadge = showArchive ? '<span class="text-[8px] bg-slate-200 text-slate-500 px-1.5 py-0.5 rounded ml-2">ARSIP</span>' : '';
+            html += '<div class="bg-white p-4 rounded-3xl card-shadow mb-4 animate-slide-up" style="animation-delay:' + dly + 's"><div class="border-b border-slate-100 pb-2 mb-3 flex items-center justify-between"><p class="text-sm font-black text-slate-800 uppercase flex items-center"><i class="fa-solid fa-user-circle text-bpd-blue mr-1.5"></i> ' + nasabah + archiveBadge + '</p><p class="text-[9px] font-bold text-slate-400">' + grouped[nasabah][0].hp + '</p></div><div class="space-y-2">';
+            grouped[nasabah].forEach(h => {
+                let bc = h.statusAkhir === "CLOSING" ? "text-emerald-600" : (h.statusAkhir === "PROSPEK" ? "text-amber-600" : "text-rose-600");
+                html += '<div class="bg-slate-50 p-3 rounded-2xl border border-slate-100 cursor-pointer hover:border-bpd-blue transition-all" onclick="openJourney(' + h.originalIndex + ')"><div class="flex justify-between items-center mb-1.5"><span class="text-[11px] font-extrabold text-bpd-blue uppercase">' + h.produk + '</span><span class="' + bc + ' text-[9px] font-black">' + h.statusAkhir + '</span></div><p class="text-[9px] font-bold text-slate-500 uppercase"><i class="fa-solid fa-users mr-1 text-slate-400"></i> TIM TERLIBAT: ' + h.tim + '</p></div>';
+            });
+            html += '</div></div>'; dly += 0.05;
+        }
+        cont.innerHTML = html;
+    }
+
+    function exportCSV() {
+        if(!printData.history || printData.history.length === 0) { alert("Tidak ada data untuk diekspor."); return; }
+        
+        const filterId = document.getElementById('filterRiwayatStaff').value; 
+        const filterProd = document.getElementById('filterRiwayatProduk').value; 
+        const filterStatus = document.getElementById('filterRiwayatStatus').value; 
+        const filterJenis = document.getElementById('filterRiwayatJenis').value; 
+        let txtStaf = filterId === "ALL" ? "SEMUA STAF" : (allUsers.find(u => u.id === filterId)?.nama || "SEMUA STAF");
+
+        let filteredData = [];
+        printData.history.forEach(h => {
+            let passed = true;
+            if(filterId !== "ALL" && !h.tim.includes(txtStaf)) passed = false;
+            if(filterProd !== "ALL" && h.produk !== filterProd) passed = false;
+            if(filterStatus !== "ALL" && h.statusAkhir !== filterStatus) passed = false;
+            if(filterJenis !== "ALL") { let hasJenis = h.logs.some(log => log.jenis === filterJenis); if(!hasJenis) passed = false; }
+            if(passed) filteredData.push(h);
+        });
+
+        if(filteredData.length === 0) { alert("Tidak ada data yang sesuai filter saat ini."); return; }
+
+        let csvContent = "data:text/csv;charset=utf-8,";
+        csvContent += "Nasabah,Nomor HP,Produk,Status Akhir,Tim Terlibat,Waktu Update Terakhir\n";
+        filteredData.forEach(h => {
+            let lastLog = h.logs.length > 0 ? h.logs[h.logs.length-1].waktu : "";
+            let cleanNasabah = `"${h.nasabah.replace(/"/g, '""')}"`;
+            let cleanProduk = `"${h.produk.replace(/"/g, '""')}"`;
+            let cleanTim = `"${h.tim.replace(/"/g, '""')}"`;
+            csvContent += `${cleanNasabah},${h.hp},${cleanProduk},${h.statusAkhir},${cleanTim},${lastLog}\n`;
+        });
+
+        let encodedUri = encodeURI(csvContent);
+        let link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", "Laporan_CRM_" + new Date().getTime() + ".csv");
+        document.body.appendChild(link); link.click(); document.body.removeChild(link);
+    }
+
+    // PERBAIKAN CETAK PDF AGAR TIDAK HALAMAN PUTIH
+    function cetakPDF() { 
+        if(!printData.history || printData.history.length === 0) { alert("Tidak ada data untuk dicetak."); return; }
+        
+        const filterId = document.getElementById('filterRiwayatStaff').value; 
+        const filterProd = document.getElementById('filterRiwayatProduk').value; 
+        const filterStatus = document.getElementById('filterRiwayatStatus').value; 
+        const filterJenis = document.getElementById('filterRiwayatJenis').value; 
+        
+        let txtStaf = filterId === "ALL" ? "SEMUA STAF" : (allUsers.find(u => u.id === filterId)?.nama || "SEMUA STAF");
+        let dateFilter = document.getElementById('filterStart').value + " s/d " + document.getElementById('filterEnd').value;
+
+        let filteredData = [];
+        let statClosing = 0, statProspek = 0, statDitolak = 0;
+
+        printData.history.forEach(h => {
+            let passed = true;
+            if(filterId !== "ALL" && !h.tim.includes(txtStaf)) passed = false;
+            if(filterProd !== "ALL" && h.produk !== filterProd) passed = false;
+            if(filterStatus !== "ALL" && h.statusAkhir !== filterStatus) passed = false;
+            if(filterJenis !== "ALL") { let hasJenis = h.logs.some(log => log.jenis === filterJenis); if(!hasJenis) passed = false; }
+            
+            if(passed) {
+                filteredData.push(h);
+                if(h.statusAkhir === "CLOSING") statClosing++;
+                else if(h.statusAkhir === "PROSPEK") statProspek++;
+                else statDitolak++;
+            }
+        });
+
+        if(filteredData.length === 0) { alert("Tidak ada riwayat nasabah yang sesuai dengan filter pencarian Anda saat ini."); return; }
+
+        let htmlStr = `
+        <div class="print-header">
+            <div>
+                <h1 style="font-size:24px; font-weight:900; margin:0; letter-spacing:-1px;">CRM<span style="color:#F37021;">PRO</span></h1>
+                <p style="font-size:10px; font-weight:bold; color:#64748b; letter-spacing:2px; margin:2px 0 0 0;">BANKALTIMTARA</p>
+                <h2 style="font-size:14px; font-weight:800; margin:15px 0 5px 0;">LAPORAN RIWAYAT INTERAKSI NASABAH</h2>
+                <p style="font-size:10px; color:#475569; margin:0;"><b>Periode:</b> ${dateFilter}</p>
+            </div>
+            <div style="text-align:right; font-size:10px;">
+                <p style="margin:0 0 4px 0;"><b>Dicetak Oleh:</b> ${activeUser.nama}</p>
+                <p style="margin:0;"><b>Waktu Cetak:</b> ${new Date().toLocaleString('id-ID')}</p>
+            </div>
+        </div>
+
+        <div style="background:#f1f5f9; padding:12px; border-radius:8px; margin-bottom:15px; font-size:10px;">
+            <span style="font-weight:bold; color:#004A8D;">PARAMETER FILTER:</span><br>
+            STAF: <b>${txtStaf}</b> &nbsp;|&nbsp; 
+            PRODUK: <b>${filterProd === "ALL" ? "SEMUA PRODUK" : filterProd}</b> &nbsp;|&nbsp; 
+            STATUS: <b>${filterStatus === "ALL" ? "SEMUA STATUS" : filterStatus}</b> &nbsp;|&nbsp; 
+            STRATEGI: <b>${filterJenis === "ALL" ? "SEMUA STRATEGI" : filterJenis}</b>
+        </div>
+
+        <div style="display:flex; justify-content:space-between; margin-bottom:20px;">
+            <div style="flex:1; border:1px solid #cbd5e1; padding:10px; margin-right:10px; text-align:center; border-radius:6px;">
+                <div style="font-size:9px; color:#64748b; font-weight:bold;">TOTAL NASABAH</div>
+                <div style="font-size:18px; font-weight:900; color:#0f172a;">${filteredData.length}</div>
+            </div>
+            <div style="flex:1; border:1px solid #cbd5e1; padding:10px; margin-right:10px; text-align:center; border-radius:6px; background:#f0fdf4;">
+                <div style="font-size:9px; color:#047857; font-weight:bold;">TOTAL CLOSING</div>
+                <div style="font-size:18px; font-weight:900; color:#064e3b;">${statClosing}</div>
+            </div>
+            <div style="flex:1; border:1px solid #cbd5e1; padding:10px; margin-right:10px; text-align:center; border-radius:6px; background:#fffbeb;">
+                <div style="font-size:9px; color:#b45309; font-weight:bold;">TOTAL PROSPEK</div>
+                <div style="font-size:18px; font-weight:900; color:#92400e;">${statProspek}</div>
+            </div>
+            <div style="flex:1; border:1px solid #cbd5e1; padding:10px; text-align:center; border-radius:6px; background:#fff1f2;">
+                <div style="font-size:9px; color:#be123c; font-weight:bold;">TOTAL DITOLAK</div>
+                <div style="font-size:18px; font-weight:900; color:#9f1239;">${statDitolak}</div>
+            </div>
+        </div>
+
+        <table class="print-table">
+            <thead>
+                <tr>
+                    <th style="width:25%;">NASABAH & KONTAK</th>
+                    <th style="width:25%;">PRODUK & STATUS</th>
+                    <th style="width:50%;">JEJAK INTERAKSI</th>
+                </tr>
+            </thead>
+            <tbody>
+        `;
+
+        filteredData.forEach(h => {
+            let statusBadge = h.statusAkhir === "CLOSING" ? "print-badge-closing" : (h.statusAkhir === "PROSPEK" ? "print-badge-prospek" : "print-badge-ditolak");
+            
+            let logsHtml = "";
+            h.logs.forEach(log => {
+               logsHtml += `
+               <div class="print-log">
+                 <div style="font-weight:900; color:#004A8D; font-size:10px;">${log.aktor} <span style="background:#e2e8f0; color:#475569; padding:2px 4px; border-radius:3px; font-size:8px; margin-left:4px;">${log.jenis}</span></div>
+                 <div style="font-size:9px; color:#64748b; margin-top:2px;">${log.waktu}</div>
+                 <div style="font-size:10px; color:#334155; margin-top:3px; font-weight:500;">${log.catatan}</div>
+               </div>`;
+            });
+
+            htmlStr += `
+            <tr>
+               <td>
+                   <div style="font-weight:900; font-size:12px; color:#0f172a;">${h.nasabah}</div>
+                   <div style="font-size:10px; color:#64748b; margin-top:2px;">${h.hp}</div>
+                   <div style="font-size:9px; color:#94a3b8; margin-top:6px; font-weight:bold;">TIM: ${h.tim}</div>
+               </td>
+               <td>
+                   <div style="font-weight:800; font-size:11px; margin-bottom:6px;">${h.produk}</div>
+                   <span class="${statusBadge}">${h.statusAkhir}</span>
+               </td>
+               <td>${logsHtml}</td>
+            </tr>`;
+        });
+
+        htmlStr += `</tbody></table>`;
+        
+        let printArea = document.getElementById('printArea');
+        let mainApp = document.getElementById('mainApp');
+        
+        printArea.innerHTML = htmlStr;
+        
+        // LEPAS CLASS HIDDEN DAN SEMBUNYIKAN APLIKASI UTAMA
+        printArea.classList.remove('hidden');
+        printArea.style.display = 'block';
+        mainApp.classList.add('hidden');
+        
+        setTimeout(() => { 
+            window.print(); 
+            
+            // KEMBALIKAN KE STATE SEMULA SETELAH DIALOG PRINT DITUTUP
+            setTimeout(() => {
+                printArea.classList.add('hidden');
+                printArea.style.display = 'none';
+                printArea.innerHTML = ""; 
+                mainApp.classList.remove('hidden');
+            }, 500); 
+        }, 500);
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+        let fInput = document.getElementById('formInput'); 
+        if(fInput) fInput.addEventListener('submit', async function(e) { 
+            e.preventDefault(); if(isSubmittingAction) return; isSubmittingAction = true;
+            const btn = document.getElementById('btnSubmit'); const btnText = document.getElementById('btnText'); const spinner = document.getElementById('btnSpinner'); 
+            
+            if(latitude === 0 || longitude === 0) { alert("LOKASI (GPS) WAJIB DIAKTIFKAN. Mohon izinkan akses lokasi pada browser Anda."); isSubmittingAction = false; return; }
+            if(!compressedImageBase64) { alert("BUKTI FOTO WAJIB DILAMPIRKAN UNTUK SEMUA METODE PENAWARAN."); isSubmittingAction = false; return; } 
+
+            let rawAssignee = document.getElementById('inputAssignee').value; let rawJenis = document.getElementById('inputJenis').value;
+            if (rawJenis === "CROSS SELLING" && (rawAssignee === "" || rawAssignee === "SELF")) { alert("TUGAS CROSS SELLING WAJIB DIOPER KE REKAN TIM."); isSubmittingAction = false; return; }
+            
+            btn.disabled = true; btn.classList.add('opacity-80'); btnText.innerText = "MENYIMPAN..."; spinner.classList.remove('hidden'); 
+            const obj = Object.fromEntries(new FormData(this)); obj.lat = latitude; obj.lng = longitude; obj.device = navigator.userAgent; obj.activeId = activeUser.id; obj.activeNama = activeUser.nama; 
+            obj.fileData = compressedImageBase64; 
+            
+            callGAS("submitActivity", obj).then(res => { 
+                if(res === true) { btn.disabled = false; btn.classList.remove('opacity-80'); btnText.innerText = "SIMPAN DATA"; spinner.classList.add('hidden'); document.getElementById('formInput').reset(); document.getElementById('nasabahExistingAlert').classList.add('hidden'); cekStatus(); compressedImageBase64 = null; document.getElementById('previewImg').classList.add('hidden'); switchMenu('pipeline'); }
+                isSubmittingAction = false; 
+            }).catch(err => { btn.disabled = false; btn.classList.remove('opacity-80'); btnText.innerText = "SIMPAN DATA"; spinner.classList.add('hidden'); isSubmittingAction = false; }); 
+        });
+        
+        let fUpdate = document.getElementById('formUpdate'); 
+        if(fUpdate) fUpdate.addEventListener('submit', function(e) { 
+            e.preventDefault(); if(isSubmittingAction) return; isSubmittingAction = true;
+            const btn = document.getElementById('btnUpdateSubmit'); btn.innerText = "PROCESSING..."; btn.disabled = true; 
+            let objData = { hpTarget: document.getElementById('modalHpTarget').value, produkTarget: document.getElementById('modalProdukTarget').value, nasabahTarget: document.getElementById('modalNasabahInput').value, statusUpdate: document.getElementById('modalStatus').value, catatanUpdate: document.getElementById('modalCatatan').value, assigneeId: document.getElementById('updateAssignee').value, jadwalFollowUpUpdate: document.getElementById('modalJadwalUpdate').value, lat: latitude, lng: longitude, activeId: activeUser.id, activeNama: activeUser.nama }; 
+            callGAS("updatePipelineStatus", objData).then(res => { btn.innerText = "SIMPAN UPDATE"; btn.disabled = false; closeModalUpdate(); if(navigator.onLine) refreshDataServer(); isSubmittingAction = false; }).catch(err => { btn.innerText = "SIMPAN UPDATE"; btn.disabled = false; isSubmittingAction = false; }); 
+        });
+        
+        let fStaff = document.getElementById('formManageStaff'); 
+        if(fStaff) fStaff.addEventListener('submit', function(e) { 
+            e.preventDefault(); if(isSubmittingAction) return; isSubmittingAction = true;
+            let btn = document.getElementById('btnStaffFormSubmit'); let txt = document.getElementById('txtStaffFormSubmit'); let spin = document.getElementById('spinStaffFormSubmit'); 
+            btn.disabled = true; txt.innerText = "MENYIMPAN..."; spin.classList.remove('hidden'); 
+            let payload = { id: document.getElementById('staffFormId').value, nama: document.getElementById('staffFormNama').value, akses: document.getElementById('staffFormAkses').value, periode: document.getElementById('staffFormPeriode').value, target: parseInt(document.getElementById('staffFormTarget').value) || 0 }; 
+            callGAS("manageUserDb", { crudAction: document.getElementById('staffFormAction').value, payload: payload }).then(res => { btn.disabled = false; txt.innerText = "SIMPAN DATA"; spin.classList.add('hidden'); initGateway(res.initData); closeStaffForm(); renderManageStaffUI(); isSubmittingAction = false; }).catch(err => { btn.disabled = false; txt.innerText = "SIMPAN DATA"; spin.classList.add('hidden'); isSubmittingAction = false; }); 
+        });
+        
+        let fProd = document.getElementById('formManageProduct'); 
+        if(fProd) fProd.addEventListener('submit', function(e) { 
+            e.preventDefault(); if(isSubmittingAction) return; isSubmittingAction = true;
+            let btn = document.getElementById('btnProductFormSubmit'); let txt = document.getElementById('txtProductFormSubmit'); let spin = document.getElementById('spinProductFormSubmit'); 
+            btn.disabled = true; txt.innerText = "MENYIMPAN..."; spin.classList.remove('hidden'); 
+            let payload = { id: document.getElementById('productFormId').value, nama: document.getElementById('productFormNama').value, kategori: document.getElementById('productFormKategori').value }; 
+            callGAS("manageProductDb", { crudAction: document.getElementById('productFormAction').value, payload: payload }).then(res => { btn.disabled = false; txt.innerText = "SIMPAN DATA"; spin.classList.add('hidden'); initGateway(res.initData); closeProductForm(); renderManageProductUI(); isSubmittingAction = false; }).catch(err => { btn.disabled = false; txt.innerText = "SIMPAN DATA"; spin.classList.add('hidden'); isSubmittingAction = false; }); 
+        });
+
+        setTimeout(requestLocationUpdate, 1000); 
+        document.getElementById('wrapUpload').classList.remove('hidden');
+
+        function getLocalIsoString(d) { let z = function(n) { return ('0'+n).slice(-2); }; return d.getFullYear() + '-' + z(d.getMonth()+1) + '-' + z(d.getDate()); }
+        let date = new Date(); let firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
+        if(document.getElementById('filterStart')) document.getElementById('filterStart').value = getLocalIsoString(firstDay); 
+        if(document.getElementById('filterEnd')) document.getElementById('filterEnd').value = getLocalIsoString(date);
+        
+        callGAS("getAppInitData").then(initData => { initGateway(initData); }).catch(err => { let s = document.getElementById('loginUserSelect'); if(s) s.innerHTML = '<option value="">ERROR KONEKSI SERVER</option>'; });
+    });
+  </script>
+</body>
+</html>
