@@ -52,9 +52,40 @@
         .print-header { border-bottom: 3px solid #004A8D; padding-bottom: 12px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: flex-end; }
         @page { size: A4 portrait; margin: 1.5cm; }
     }
+    /* --- CSS TAMBAHAN MODERN & PLAYFUL --- */
+    .glass-nav { 
+        background: rgba(255, 255, 255, 0.85); 
+        backdrop-filter: blur(20px); 
+        -webkit-backdrop-filter: blur(20px);
+    }
+    
+    /* Neumorphism Lembut pada Kartu */
+    .card-shadow { 
+        background: linear-gradient(145deg, #ffffff, #f8fafc);
+        box-shadow: 10px 10px 30px rgba(0, 74, 141, 0.04), -10px -10px 30px #ffffff; 
+        border: 1px solid rgba(255, 255, 255, 0.8); 
+    }
+    
+    /* Animasi Playful (Membal) untuk Navigasi & Kartu */
+    .nav-item { 
+        color: #94A3B8; 
+        transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); 
+        cursor: pointer; 
+    }
+    .nav-item.active { 
+        color: #F37021; 
+        background: rgba(243, 112, 33, 0.08); /* Latar oranye sangat tipis saat aktif */
+        transform: scale(1.05) translateY(-3px); 
+    } 
+    .nav-item.active i { transform: scale(1.15); }
+    .nav-item:hover:not(.active) { transform: translateY(-2px); color: #004A8D; }
   </style>
 </head>
-<body class="text-slate-800 pb-24 selection:bg-blue-200">
+<body class="text-slate-800 pb-24 md:pb-0 md:pl-28 selection:bg-blue-200 overflow-x-hidden relative min-h-screen">
+
+  <!-- DECORATIVE BACKGROUND BLOBS (Menciptakan kesan modern playful) -->
+  <div class="fixed top-[-10%] left-[-10%] w-[50vw] h-[50vw] bg-bpd-blue/5 rounded-full blur-[80px] pointer-events-none -z-10 no-print"></div>
+  <div class="fixed bottom-[-10%] right-[-10%] w-[40vw] h-[40vw] bg-bpd-orange/5 rounded-full blur-[80px] pointer-events-none -z-10 no-print"></div>
 
   <div id="offlineAlert" class="hidden fixed top-0 w-full bg-rose-500 text-white text-[10px] font-bold text-center py-2 z-[999] shadow-md uppercase tracking-widest transition-all"><i class="fa-solid fa-wifi mr-1"></i> Mode Offline: Menunggu Koneksi Stabil</div>
 
@@ -347,7 +378,7 @@
            <div id="adminContentProduk" class="space-y-4 hidden"><button onclick="openProductForm('ADD')" class="w-full bg-indigo-50 text-indigo-600 border border-indigo-200 hover:bg-indigo-100 text-xs font-bold py-3 rounded-xl shadow-sm transition-colors uppercase"><i class="fa-solid fa-plus mr-1"></i> TAMBAH PRODUK BARU</button><div id="manageProductContainer" class="space-y-3 pb-4"></div></div>
         </section>
       </main>
-      <nav id="bottomNav" class="fixed bottom-0 w-full glass-nav flex justify-around items-center pb-safe pt-3 px-1 z-50 no-print"></nav>
+     <nav id="bottomNav" class="fixed bottom-0 left-0 w-full md:w-28 md:h-screen md:top-0 md:flex-col md:justify-center md:items-center glass-nav flex justify-around items-center pb-safe pt-2 md:pt-0 px-2 md:px-0 z-50 no-print border-t md:border-t-0 md:border-r border-slate-200/60 transition-all duration-500"></nav>
   </div>
 
   <div id="printArea" class="hidden"></div>
@@ -571,19 +602,43 @@
     function closeNotifications() { document.getElementById('modalNotif').classList.add('hidden'); }
 
     function renderNavigation() {
-        let nav = document.getElementById('bottomNav'); let html = '';
+        let nav = document.getElementById('bottomNav'); 
+        let html = '';
+        
+        // Helper function agar kode lebih bersih & seragam
+        const createNavBtn = (id, icon, label, hasBadge = false) => {
+            let badge = hasBadge ? '<span id="navAlert" class="absolute top-1 right-2 md:top-2 md:right-3 bg-rose-500 w-2.5 h-2.5 rounded-full border-2 border-white hidden shadow-md pulse-red"></span>' : '';
+            return `
+            <button id="nav-${id}" onclick="switchMenu('${id}')" class="nav-item relative flex flex-col items-center justify-center w-full md:w-20 h-14 md:h-20 md:my-3 rounded-2xl group">
+                <i class="fa-solid ${icon} text-[20px] md:text-[24px] mb-1 md:mb-1.5 transition-transform duration-300"></i>
+                <span class="text-[9px] font-extrabold tracking-wide uppercase">${label}</span>
+                ${badge}
+            </button>`;
+        };
+
         if(activeUser.role === 'ADMIN') {
-            html += '<button id="nav-kpi" onclick="switchMenu(\'kpi\')" class="nav-item flex flex-col items-center p-2"><i class="fa-solid fa-chart-pie text-[20px] mb-1.5"></i><span class="text-[9px] font-extrabold tracking-wide uppercase">KINERJA</span></button>';
-            html += '<button id="nav-pipeline" onclick="switchMenu(\'pipeline\')" class="nav-item flex flex-col items-center p-2 relative"><i class="fa-solid fa-users-viewfinder text-[20px] mb-1.5"></i><span class="text-[9px] font-extrabold tracking-wide uppercase">PANTAUAN</span><span id="navAlert" class="absolute top-1 right-[25%] bg-rose-500 w-2 h-2 rounded-full border border-white hidden shadow-sm"></span></button>';
-            html += '<button id="nav-riwayat" onclick="switchMenu(\'riwayat\')" class="nav-item flex flex-col items-center p-2"><i class="fa-solid fa-clock-rotate-left text-[20px] mb-1.5"></i><span class="text-[9px] font-extrabold tracking-wide uppercase">RIWAYAT</span></button>';
-            html += '<button id="nav-admin" onclick="switchMenu(\'admin\')" class="nav-item flex flex-col items-center p-2"><i class="fa-solid fa-server text-[20px] mb-1.5"></i><span class="text-[9px] font-extrabold tracking-wide uppercase">SISTEM</span></button>';
+            html += createNavBtn('kpi', 'fa-chart-pie', 'Kinerja');
+            html += createNavBtn('pipeline', 'fa-users-viewfinder', 'Pantauan', true);
+            html += createNavBtn('riwayat', 'fa-clock-rotate-left', 'Riwayat');
+            html += createNavBtn('admin', 'fa-server', 'Sistem');
         } else {
-            html += '<button id="nav-input" onclick="switchMenu(\'input\')" class="nav-item flex flex-col items-center p-2"><i class="fa-solid fa-keyboard text-[20px] mb-1.5"></i><span class="text-[9px] font-extrabold tracking-wide uppercase">INPUT</span></button>';
-            html += '<button id="nav-pipeline" onclick="switchMenu(\'pipeline\')" class="nav-item flex flex-col items-center p-2 relative"><i class="fa-solid fa-users-viewfinder text-[20px] mb-1.5"></i><span class="text-[9px] font-extrabold tracking-wide uppercase">TUGAS</span><span id="navAlert" class="absolute top-1 right-[25%] bg-rose-500 w-2.5 h-2.5 rounded-full border-2 border-white hidden shadow-md"></span></button>';
-            html += '<button id="nav-kpi" onclick="switchMenu(\'kpi\')" class="nav-item flex flex-col items-center p-2"><i class="fa-solid fa-chart-pie text-[20px] mb-1.5"></i><span class="text-[9px] font-extrabold tracking-wide uppercase">KINERJA</span></button>';
-            html += '<button id="nav-riwayat" onclick="switchMenu(\'riwayat\')" class="nav-item flex flex-col items-center p-2"><i class="fa-solid fa-clock-rotate-left text-[20px] mb-1.5"></i><span class="text-[9px] font-extrabold tracking-wide uppercase">RIWAYAT</span></button>';
+            html += createNavBtn('input', 'fa-keyboard', 'Input');
+            html += createNavBtn('pipeline', 'fa-users-viewfinder', 'Tugas', true);
+            html += createNavBtn('kpi', 'fa-chart-pie', 'Kinerja');
+            html += createNavBtn('riwayat', 'fa-clock-rotate-left', 'Riwayat');
         }
+        
         nav.innerHTML = html;
+        
+        // Opsional: Tambahkan logo kecil bankaltimtara di bagian atas Sidebar khusus PC
+        if(window.innerWidth >= 768) {
+            nav.innerHTML = `
+            <div class="absolute top-6 left-0 w-full flex justify-center hidden md:flex">
+                <div class="w-12 h-12 bg-bpd-blue text-white rounded-2xl shadow-lg flex items-center justify-center text-xl font-black">
+                    129
+                </div>
+            </div>` + nav.innerHTML;
+        }
     }
 
     function switchMenu(viewId) {
