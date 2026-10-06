@@ -559,7 +559,11 @@
         try {
           await callGAS('authenticateAdmin', { adminPin: pinInput });
           adminSessionPin = pinInput;
-        } catch (e) { alert('PIN ADMIN TIDAK VALID ATAU BELUM DIKONFIGURASI.'); return; }
+        } catch (e) {
+          const detail = (e && e.message) ? e.message.replace(/^Server Error:\s*/i, '') : 'Tidak dapat memverifikasi PIN admin.';
+          alert('Gagal login admin.\n\n' + detail + '\n\nPeriksa Script Properties CRM_ADMIN_PIN dan pastikan backend Web App sudah di-deploy ke versi terbaru.');
+          return;
+        }
       } else { adminSessionPin = ''; }
       activeUser = { id: selectedId, role: selectedRole, nama: selectedName };
       document.getElementById('headerRoleName').innerText = activeUser.nama.split(' ')[0];
