@@ -772,28 +772,31 @@
         document.getElementById('globalSearchResults').innerHTML = '<p class="text-center text-xs text-slate-300 font-bold tracking-widest mt-10">KETIK UNTUK MENCARI DATA...</p>';
     }
     function runGlobalSearch() {
-        let q = document.getElementById('globalSearchInput').value.toLowerCase().trim();
-        let resultsBox = document.getElementById('globalSearchResults');
-        if(q.length < 2) { resultsBox.innerHTML = '<p class="text-center text-xs text-slate-300 font-bold tracking-widest mt-10">KETIK MINIMAL 2 HURUF...</p>'; return; }
-        
-        let found = [];
-        printData.history.forEach((h, idx) => {
-            if(h.nasabah.toLowerCase().includes(q) || h.hp.includes(q)) {
-                found.push({ ...h, sourceIdx: idx, type: 'Riwayat' });
-            }
+        const input = document.getElementById('globalSearchInput');
+        const resultsBox = document.getElementById('globalSearchResults');
+        const q = String(input?.value || '').trim();
+        const norm = value => String(value == null ? '' : value).toLocaleLowerCase('id-ID');
+        const esc = value => String(value == null ? '' : value).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+        if (q.length < 2) { resultsBox.innerHTML = '<p class="text-center text-xs text-slate-400 font-bold tracking-widest mt-10">KETIK MINIMAL 2 HURUF...</p>'; return; }
+
+        // Master Nasabah is the primary index. This prevents search from depending only on legacy printData.history.
+        const master = (typeof window.v38SearchCustomers === 'function') ? window.v38SearchCustomers(q) : [];
+        const matches = master.map(c => ({kind:'master', id:c.Nasabah_ID, nama:c.Nama, hp:c.No_HP, produk:c.Produk_Potensial, status:c.Status, owner:c.Owner_Nama}));
+        const seen = new Set(matches.map(x => [norm(x.nama), String(x.hp||'').replace(/\D/g,'')].join('|')));
+        const legacy = (typeof printData !== 'undefined' && Array.isArray(printData.history)) ? printData.history : [];
+        legacy.forEach((h, idx) => {
+            if (![h.nasabah,h.hp,h.produk,h.statusAkhir].some(v => norm(v).includes(norm(q)))) return;
+            const key = [norm(h.nasabah), String(h.hp||'').replace(/\D/g,'')].join('|');
+            if (seen.has(key)) return;
+            seen.add(key); matches.push({kind:'legacy', sourceIdx:idx, nama:h.nasabah, hp:h.hp, produk:h.produk, status:h.statusAkhir, owner:h.picSekarang||h.aktor||''});
         });
-        
-        if(found.length === 0) { resultsBox.innerHTML = '<p class="text-center text-xs text-rose-300 font-bold tracking-widest mt-10">TIDAK DITEMUKAN</p>'; return; }
-        
-        let html = "";
-        found.forEach(item => {
-            let badge = item.statusAkhir === "CLOSING" ? "text-emerald-500" : (item.statusAkhir === "PROSPEK" ? "text-amber-500" : "text-rose-500");
-            html += `<div onclick="closeGlobalSearch(); openJourney(${item.sourceIdx})" class="bg-white p-3 rounded-xl shadow-sm border border-slate-100 flex items-center justify-between cursor-pointer hover:border-bpd-blue transition-colors">
-                        <div><p class="text-xs font-black text-slate-800 uppercase">${item.nasabah}</p><p class="text-[9px] font-bold text-slate-400">${item.hp} | ${item.produk}</p></div>
-                        <div class="text-right"><span class="${badge} text-[9px] font-black uppercase">${item.statusAkhir}</span><br><span class="text-[8px] bg-slate-100 text-slate-500 px-1 rounded">${item.type}</span></div>
-                     </div>`;
-        });
-        resultsBox.innerHTML = html;
+        if (!matches.length) { resultsBox.innerHTML = '<p class="text-center text-xs text-slate-400 font-bold tracking-widest mt-10">TIDAK DITEMUKAN DI DATA NASABAH MAUPUN RIWAYAT</p>'; return; }
+        resultsBox.innerHTML = matches.slice(0,60).map(item => {
+            const status = String(item.status||'DATA NASABAH').toUpperCase();
+            const badge = status === 'CLOSING' ? 'text-emerald-700 bg-emerald-50' : (status === 'PROSPEK' ? 'text-amber-700 bg-amber-50' : (status === 'DITOLAK' ? 'text-rose-700 bg-rose-50' : 'text-blue-700 bg-blue-50'));
+            const action = item.kind === 'master' ? `closeGlobalSearch(); switchMenu(&quot;v38&quot;); setTimeout(()=>v38OpenCustomerProfile(${JSON.stringify(String(item.id||''))}),120)` : `closeGlobalSearch(); openJourney(${Number(item.sourceIdx)||0})`;
+            return `<button type="button" onclick='${action}' class="w-full text-left bg-white p-3 rounded-xl shadow-sm border border-slate-100 flex items-center justify-between gap-3 hover:border-blue-400 hover:shadow-md transition-all"><span class="min-w-0"><span class="block text-xs font-black text-slate-800 uppercase break-words">${esc(item.nama||'Tanpa nama')}</span><span class="block text-[10px] font-semibold text-slate-500 mt-1 break-words">${esc(item.hp||'No HP belum ada')} · ${esc(item.produk||'Produk belum dicatat')}</span><span class="block text-[10px] text-slate-400 mt-1">PIC: ${esc(item.owner||'-')}</span></span><span class="shrink-0 text-right"><span class="inline-block rounded-full px-2 py-1 text-[9px] font-black ${badge}">${esc(status)}</span><span class="block text-[8px] text-slate-400 mt-1">${item.kind==='master'?'PROFIL NASABAH':'RIWAYAT LAMA'}</span></span></button>`;
+        }).join('');
     }
 
     function openNotifications() {
