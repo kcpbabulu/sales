@@ -138,7 +138,7 @@
         </div>
         <div id="wrapPin" class="relative mb-6 hidden">
             <i class="fa-solid fa-lock absolute left-4 top-[18px] text-bpd-blue text-lg"></i>
-            <input type="password" id="loginPin" placeholder="PIN AKSES ADMIN" class="w-full p-4 pl-12 border-2 border-slate-100 rounded-2xl text-sm font-black text-slate-700 focus:border-bpd-blue outline-none bg-slate-50">
+            <input type="password" id="loginPin" placeholder="PIN AKSES INDIVIDUAL (6 DIGIT)" class="w-full p-4 pl-12 border-2 border-slate-100 rounded-2xl text-sm font-black text-slate-700 focus:border-bpd-blue outline-none bg-slate-50">
         </div>
         <button onclick="loginApp()" class="w-full bg-bpd-orange hover:bg-[#d95c14] active:scale-95 text-white font-black py-4 rounded-2xl shadow-lg transition-all text-sm tracking-widest flex justify-center items-center uppercase">MASUK SISTEM <i class="fa-solid fa-arrow-right ml-2"></i></button>
      </div>
@@ -464,6 +464,29 @@
      <nav id="bottomNav" class="fixed bottom-0 left-0 w-full md:w-28 md:h-screen md:top-0 md:flex-col md:justify-center md:items-center glass-nav flex justify-around items-center pb-safe pt-2 md:pt-0 px-2 md:px-0 z-50 no-print border-t md:border-t-0 md:border-r border-slate-200/60 transition-all duration-500"></nav>
   </div>
 
+  <section id="view-v38" class="view-section hidden animate-fade-in space-y-4 pb-8">
+    <div class="rounded-3xl p-5 md:p-7 text-white shadow-lg" style="background:linear-gradient(120deg,#102B46,#2877B8)">
+      <div class="flex flex-wrap items-start justify-between gap-3"><div><p class="text-[10px] font-black tracking-[.2em] uppercase text-blue-100">CRM SUPER APP • V38</p><h2 class="text-2xl md:text-3xl font-black mt-2">Pusat Operasional</h2><p class="text-sm text-blue-100 mt-2 max-w-2xl">Kelola profil nasabah, agenda tindak lanjut, dan pengajuan dalam satu workspace.</p></div><button onclick="v38Refresh()" class="rounded-xl bg-white/15 hover:bg-white/25 px-4 py-3 text-xs font-black"><i class="fa-solid fa-rotate mr-2"></i>MUAT ULANG</button></div>
+    </div>
+    <div id="v38Status" class="hidden rounded-xl p-3 text-sm font-bold"></div>
+    <div id="v38Kpis" class="grid grid-cols-2 lg:grid-cols-4 gap-3"></div>
+    <div class="grid grid-cols-1 xl:grid-cols-2 gap-4">
+      <div class="bg-white rounded-2xl border border-slate-200 p-4 md:p-5 shadow-sm"><div class="flex items-center justify-between mb-4"><div><h3 class="font-black text-slate-800">Profil nasabah</h3><p class="text-xs text-slate-500 mt-1">Pencarian, data dasar, dan pencegahan duplikasi.</p></div><span class="rounded-xl bg-blue-50 text-blue-700 p-3"><i class="fa-solid fa-address-card"></i></span></div>
+        <form id="v38CustomerForm" class="grid grid-cols-1 md:grid-cols-2 gap-3"><input id="v38CustName" required maxlength="180" placeholder="Nama lengkap nasabah *" class="border rounded-xl p-3 text-sm"><input id="v38CustPhone" maxlength="30" placeholder="Nomor HP" class="border rounded-xl p-3 text-sm"><input id="v38CustEmail" type="email" placeholder="Email" class="border rounded-xl p-3 text-sm"><select id="v38CustSegment" class="border rounded-xl p-3 text-sm"><option>UMUM</option><option>PERORANGAN</option><option>UMKM</option><option>BADAN USAHA</option><option>PRIORITAS</option></select><input id="v38CustAddress" maxlength="500" placeholder="Alamat" class="border rounded-xl p-3 text-sm md:col-span-2"><textarea id="v38CustNote" maxlength="1000" placeholder="Catatan ringkas (hindari data sensitif yang tidak diperlukan)" class="border rounded-xl p-3 text-sm md:col-span-2" rows="2"></textarea><button class="rounded-xl bg-[#102B46] text-white font-black text-sm p-3 md:col-span-2">SIMPAN PROFIL NASABAH</button></form>
+        <div class="mt-5"><input id="v38CustomerSearch" oninput="v38RenderCustomers()" placeholder="Cari nama / nomor HP..." class="w-full border rounded-xl p-3 text-sm"><div id="v38Customers" class="mt-3 space-y-2"></div></div>
+      </div>
+      <div class="bg-white rounded-2xl border border-slate-200 p-4 md:p-5 shadow-sm"><div class="flex items-center justify-between mb-4"><div><h3 class="font-black text-slate-800">Agenda tindak lanjut</h3><p class="text-xs text-slate-500 mt-1">Prioritas, jadwal, hasil, dan status tugas.</p></div><span class="rounded-xl bg-amber-50 text-amber-700 p-3"><i class="fa-solid fa-calendar-check"></i></span></div>
+        <form id="v38FollowForm" class="grid grid-cols-1 md:grid-cols-2 gap-3"><select id="v38FollowCustomer" required class="border rounded-xl p-3 text-sm md:col-span-2"><option value="">Pilih nasabah *</option></select><input id="v38FollowProduct" required placeholder="Produk / kebutuhan" class="border rounded-xl p-3 text-sm"><input id="v38FollowDue" type="datetime-local" required class="border rounded-xl p-3 text-sm"><select id="v38FollowPriority" class="border rounded-xl p-3 text-sm"><option>NORMAL</option><option>TINGGI</option><option>URGENT</option></select><input id="v38FollowNote" maxlength="1000" placeholder="Agenda / catatan" class="border rounded-xl p-3 text-sm"><button class="rounded-xl bg-[#2877B8] text-white font-black text-sm p-3 md:col-span-2">JADWALKAN FOLLOW-UP</button></form>
+        <div id="v38Tasks" class="mt-4 space-y-2"></div>
+      </div>
+    </div>
+    <div class="bg-white rounded-2xl border border-slate-200 p-4 md:p-5 shadow-sm"><div class="flex flex-wrap items-center justify-between gap-3"><div><h3 class="font-black text-slate-800">Pipeline pengajuan</h3><p class="text-xs text-slate-500 mt-1">Tahapan, PIC, dan kelengkapan dokumen. Nilai plafon bersifat indikatif.</p></div><button onclick="v38ExportApplications()" class="rounded-xl border border-slate-200 px-4 py-2 text-xs font-black text-slate-700"><i class="fa-solid fa-file-csv mr-2"></i>EKSPOR CSV</button></div>
+      <form id="v38ApplicationForm" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-3 mt-4"><select id="v38AppCustomer" required class="border rounded-xl p-3 text-sm"><option value="">Pilih nasabah *</option></select><input id="v38AppProduct" required placeholder="Produk" class="border rounded-xl p-3 text-sm"><select id="v38AppType" class="border rounded-xl p-3 text-sm"><option>KREDIT</option><option>DANA</option><option>LAYANAN</option></select><select id="v38AppStatus" class="border rounded-xl p-3 text-sm"><option>DRAF</option><option>DOKUMEN</option><option>ANALISIS</option><option>PENGAJUAN</option><option>DISETUJUI</option><option>DIREALISASI</option><option>DITOLAK</option><option>BATAL</option></select><input id="v38AppLimit" type="number" min="0" step="1000000" placeholder="Plafon indikatif (Rp)" class="border rounded-xl p-3 text-sm"><input id="v38AppDocsRequired" type="number" min="0" max="100" placeholder="Dokumen wajib" class="border rounded-xl p-3 text-sm"><input id="v38AppDocsComplete" type="number" min="0" max="100" placeholder="Dokumen lengkap" class="border rounded-xl p-3 text-sm"><input id="v38AppNote" maxlength="1000" placeholder="Catatan / langkah berikutnya" class="border rounded-xl p-3 text-sm"><button class="rounded-xl bg-[#102B46] text-white font-black text-sm p-3 md:col-span-2 xl:col-span-4">BUAT PENGAJUAN</button></form>
+      <div id="v38Applications" class="mt-4 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3"></div>
+    </div>
+    <div id="v38AdminHealthWrap" class="hidden bg-slate-50 rounded-2xl border border-slate-200 p-4"><div class="flex items-center justify-between"><div><h3 class="font-black text-slate-800">Kesehatan sistem</h3><p class="text-xs text-slate-500 mt-1">Pemeriksaan skema database v38.</p></div><button onclick="v38CheckHealth()" class="rounded-xl bg-slate-800 text-white px-3 py-2 text-xs font-black">PERIKSA</button></div><pre id="v38Health" class="text-xs whitespace-pre-wrap mt-3 text-slate-600"></pre></div>
+  </section>
+
   <div id="printArea" class="hidden"></div>
 
   <script>
@@ -515,6 +538,9 @@
         let failedQueue = [];
         for (let item of queue) {
             try {
+                const queuedActor = item.data && (item.data.userId || item.data.activeId);
+                if (queuedActor && activeUser && activeUser.id && String(queuedActor) !== String(activeUser.id)) { failedQueue.push(item); continue; }
+                if (activeSessionToken && item.data) { item.data.sessionToken = activeSessionToken; item.data.userId = activeUser.id; if (item.data.activeId) item.data.activeId = activeUser.id; }
                 let res = await fetch(GAS_API_URL, { method: "POST", body: JSON.stringify({ action: item.action, data: item.data }), headers: { "Content-Type": "text/plain;charset=utf-8" } });
                 let json = await res.json();
                 if(!json.success) throw new Error(json.msg || "Sync Fail");
@@ -540,6 +566,7 @@
     async function callGAS(actionName, dataPayload = {}) {
       const mutasi = ["submitActivity", "updatePipelineStatus", "manageUserDb", "manageProductDb"];
       const payload = Object.assign({}, dataPayload);
+      if (activeSessionToken && !['authenticateAdmin','authenticateStaff','getAppInitData'].includes(actionName) && !payload.sessionToken) payload.sessionToken = activeSessionToken;
       if (mutasi.includes(actionName) && !payload.requestId) payload.requestId = (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : ('req-' + Date.now() + '-' + Math.random().toString(36).slice(2));
       if (["manageUserDb", "manageProductDb", "authenticateAdmin"].includes(actionName) && !payload.adminPin && adminSessionPin) payload.adminPin = adminSessionPin;
       if (["manageUserDb", "manageProductDb"].includes(actionName) && !payload.adminPin) throw new Error('Sesi admin tidak tersedia. Silakan login ulang.');
@@ -565,7 +592,7 @@
       } catch (error) { alert("Server Error: " + error.message); throw error; }
     }
 
-    let activeUser = { id: '', role: '', nama: '' }; let adminSessionPin = ''; let latitude = 0, longitude = 0; 
+    let activeUser = { id: '', role: '', nama: '' }; let adminSessionPin = ''; let activeSessionToken = ''; let latitude = 0, longitude = 0; 
     let printData = { stats: {}, activeTasks: [], delegatedTasks: [], history: [], leaderboard: [], uniqueNasabah: [], trendData: [], trendLabels: [] };
     let allUsers = []; let allProducts = []; let compressedImageBase64 = null; let myChart = null;
 
@@ -600,8 +627,8 @@
         const val = document.getElementById('loginUserSelect').value;
         if(!val) { document.getElementById('wrapPin').classList.add('hidden'); return; }
         const role = val.split('|')[1];
-        if(role === 'ADMIN') document.getElementById('wrapPin').classList.remove('hidden');
-        else document.getElementById('wrapPin').classList.add('hidden');
+        document.getElementById('wrapPin').classList.remove('hidden');
+        document.getElementById('loginPin').placeholder = role === 'ADMIN' ? 'PIN ADMIN' : 'PIN STAF INDIVIDUAL (6 DIGIT)';
     }
 
     async function loginApp() {
@@ -611,16 +638,17 @@
       const selectedRole = parts[1];
       const selectedName = parts.slice(2).join('|');
       const pinInput = document.getElementById('loginPin').value;
-      if(selectedRole === 'ADMIN') {
-        try {
-          await callGAS('authenticateAdmin', { adminPin: pinInput });
-          adminSessionPin = pinInput;
-        } catch (e) {
-          const detail = (e && e.message) ? e.message.replace(/^Server Error:\s*/i, '') : 'Tidak dapat memverifikasi PIN admin.';
-          alert('Gagal login admin.\n\n' + detail + '\n\nPeriksa Script Properties CRM_ADMIN_PIN dan pastikan backend Web App sudah di-deploy ke versi terbaru.');
-          return;
-        }
-      } else { adminSessionPin = ''; }
+      try {
+        const auth = selectedRole === 'ADMIN'
+          ? await callGAS('authenticateAdmin', { userId: selectedId, adminPin: pinInput })
+          : await callGAS('authenticateStaff', { userId: selectedId, pin: pinInput });
+        activeSessionToken = auth.token;
+        adminSessionPin = selectedRole === 'ADMIN' ? pinInput : '';
+      } catch (e) {
+        const detail = (e && e.message) ? e.message.replace(/^Server Error:\s*/i, '') : 'Tidak dapat memverifikasi PIN.';
+        alert('Gagal login.\n\n' + detail + (selectedRole === 'ADMIN' ? '\n\nPeriksa Script Properties CRM_ADMIN_PIN dan deployment Apps Script.' : '\n\nJika PIN belum diatur, Admin harus menetapkan PIN individual melalui menu Sistem.'));
+        return;
+      }
       activeUser = { id: selectedId, role: selectedRole, nama: selectedName };
       document.getElementById('headerRoleName').innerText = activeUser.nama.split(' ')[0];
       document.getElementById('kpiTitle').innerText = (activeUser.role === "ADMIN") ? "TARGET TIM" : "TARGET PRIBADI";
@@ -636,7 +664,8 @@
     }
 
     function logoutApp() { 
-        adminSessionPin = ''; activeUser = { id: '', role: '', nama: '' };
+        if (activeSessionToken && activeUser.id) { try { callGAS('logoutSession', { userId: activeUser.id }).catch(() => {}); } catch(e) {} }
+        adminSessionPin = ''; activeSessionToken = ''; activeUser = { id: '', role: '', nama: '' };
         document.getElementById('mainApp').classList.add('hidden'); document.getElementById('view-gateway').classList.remove('hidden'); 
         activeUser = { id: '', role: '', nama: '' }; document.getElementById('loginUserSelect').value = ""; document.getElementById('loginPin').value = "";
     }
@@ -864,6 +893,7 @@
             html += createNavBtn('kpi', 'fa-chart-pie', 'Kinerja');
             html += createNavBtn('pipeline', 'fa-users-viewfinder', 'Pantauan', true);
             html += createNavBtn('crm', 'fa-address-card', 'CRM');
+            html += createNavBtn('v38', 'fa-layer-group', 'Workspace');
             html += createNavBtn('reports', 'fa-file-lines', 'Laporan');
             html += createNavBtn('riwayat', 'fa-clock-rotate-left', 'Riwayat');
             html += createNavBtn('admin', 'fa-server', 'Sistem');
@@ -871,6 +901,7 @@
             html += createNavBtn('input', 'fa-keyboard', 'Input');
             html += createNavBtn('pipeline', 'fa-users-viewfinder', 'Tugas', true);
             html += createNavBtn('crm', 'fa-address-card', 'CRM');
+            html += createNavBtn('v38', 'fa-layer-group', 'Workspace');
             html += createNavBtn('reports', 'fa-file-lines', 'Laporan');
             html += createNavBtn('kpi', 'fa-chart-pie', 'Kinerja');
             html += createNavBtn('riwayat', 'fa-clock-rotate-left', 'Riwayat');
@@ -892,6 +923,7 @@
     function switchMenu(viewId) {
       if(viewId === 'input') requestLocationUpdate();
       if(viewId === 'crm') switchCRMTab(crmCurrentTab || 'follow');
+      if(viewId === 'v38' && typeof v38Refresh === 'function') v38Refresh();
       if(viewId === 'reports' && printData) renderReports(printData);
       document.querySelectorAll('.view-section').forEach(el => el.classList.add('hidden')); document.getElementById('view-' + viewId).classList.remove('hidden');
       document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active')); document.getElementById('nav-' + viewId).classList.add('active');
@@ -916,7 +948,7 @@
         let cont = document.getElementById('manageStaffContainer'); let html = "";
         allUsers.forEach(u => {
             let badge = u.akses === 'ADMIN' ? 'bg-indigo-100 text-indigo-700' : 'bg-slate-100 text-slate-600';
-            html += '<div class="bg-white p-4 rounded-2xl card-shadow border border-slate-100 flex items-center justify-between"><div><p class="text-xs font-black text-slate-800 uppercase">' + u.nama + '</p><div class="flex items-center space-x-2 mt-1"><span class="text-[8px] ' + badge + ' px-1.5 py-0.5 rounded font-extrabold uppercase">' + u.akses + '</span>' + (u.akses === 'USER' ? '<span class="text-[8px] bg-bpd-blue/10 text-bpd-blue px-1.5 py-0.5 rounded font-bold">TARGET: ' + u.target + ' (' + u.periode + ')</span>' : '') + '</div></div><div class="flex space-x-1"><button onclick="openStaffForm(\'EDIT\', \'' + u.id + '\')" class="w-7 h-7 bg-amber-50 text-amber-500 rounded-lg flex items-center justify-center hover:bg-amber-100 transition-colors"><i class="fa-solid fa-pen text-xs"></i></button><button onclick="deleteStaff(\'' + u.id + '\', \'' + u.nama + '\')" class="w-7 h-7 bg-rose-50 text-rose-500 rounded-lg flex items-center justify-center hover:bg-rose-100 transition-colors"><i class="fa-solid fa-trash text-xs"></i></button></div></div>';
+            html += '<div class="bg-white p-4 rounded-2xl card-shadow border border-slate-100 flex items-center justify-between"><div><p class="text-xs font-black text-slate-800 uppercase">' + u.nama + '</p><div class="flex items-center space-x-2 mt-1"><span class="text-[8px] ' + badge + ' px-1.5 py-0.5 rounded font-extrabold uppercase">' + u.akses + '</span>' + (u.akses === 'USER' ? '<span class="text-[8px] bg-bpd-blue/10 text-bpd-blue px-1.5 py-0.5 rounded font-bold">TARGET: ' + u.target + ' (' + u.periode + ')</span>' : '') + '</div></div><div class="flex space-x-1">' + (u.akses === 'USER' ? '<button title="Atur PIN individual" onclick="setStaffPin(\'' + u.id + '\')" class="w-7 h-7 bg-blue-50 text-blue-600 rounded-lg flex items-center justify-center"><i class="fa-solid fa-key text-xs"></i></button>' : '') + '<button onclick="openStaffForm(\'EDIT\', \'' + u.id + '\')" class="w-7 h-7 bg-amber-50 text-amber-500 rounded-lg flex items-center justify-center hover:bg-amber-100 transition-colors"><i class="fa-solid fa-pen text-xs"></i></button><button onclick="deleteStaff(\'' + u.id + '\', \'' + u.nama + '\')" class="w-7 h-7 bg-rose-50 text-rose-500 rounded-lg flex items-center justify-center hover:bg-rose-100 transition-colors"><i class="fa-solid fa-trash text-xs"></i></button></div></div>';
         });
         cont.innerHTML = html;
     }
@@ -925,6 +957,13 @@
         let cont = document.getElementById('manageProductContainer'); let html = "";
         allProducts.forEach(p => { html += '<div class="bg-white p-4 rounded-2xl card-shadow border border-slate-100 flex items-center justify-between"><div><p class="text-xs font-black text-slate-800 uppercase">' + p.nama + '</p><p class="text-[9px] text-slate-500 font-bold uppercase tracking-widest mt-0.5"><i class="fa-solid fa-tag mr-1"></i>' + p.kategori + '</p></div><div class="flex space-x-1"><button onclick="openProductForm(\'EDIT\', \'' + p.id + '\')" class="w-7 h-7 bg-amber-50 text-amber-500 rounded-lg flex items-center justify-center hover:bg-amber-100 transition-colors"><i class="fa-solid fa-pen text-xs"></i></button><button onclick="deleteProduct(\'' + p.id + '\', \'' + p.nama + '\')" class="w-7 h-7 bg-rose-50 text-rose-500 rounded-lg flex items-center justify-center hover:bg-rose-100 transition-colors"><i class="fa-solid fa-trash text-xs"></i></button></div></div>'; });
         if(cont) cont.innerHTML = html;
+    }
+
+    async function setStaffPin(id) {
+      const staff = allUsers.find(u => u.id === id); const nama = staff ? staff.nama : id;
+      const pin = prompt('Atur PIN individual untuk ' + nama + ' (angka 6–12 digit). PIN tidak dapat dipulihkan, hanya diatur ulang.');
+      if (pin === null) return;
+      try { const r = await callGAS('adminSetStaffPin', { userId: activeUser.id, targetUserId: id, newPin: pin, adminPin: adminSessionPin }); alert(r.message || 'PIN berhasil diatur.'); } catch(e) { alert(e.message || 'Gagal mengatur PIN.'); }
     }
 
     function openStaffForm(a, id = '') {
@@ -1443,5 +1482,6 @@
         callGAS("getAppInitData").then(initData => { initGateway(initData); }).catch(err => { let s = document.getElementById('loginUserSelect'); if(s) s.innerHTML = '<option value="">ERROR KONEKSI SERVER</option>'; });
     });
   </script>
+  <script src="./v38.js"></script>
 </body>
 </html>
