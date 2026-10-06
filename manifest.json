@@ -1,7 +1,7 @@
 {
-  "name": "CRM PRO — Customer Relationship Management",
-  "short_name": "CRM Super App",
-  "description": "CRM profesional Bankaltimtara untuk pengelolaan nasabah, aktivitas, pipeline, laporan dan administrasi.",
+  "name": "CRM SuperApp Bankaltimtara Babulu V42",
+  "short_name": "CRM SuperApp",
+  "description": "CRM cross-selling terpadu dengan Customer 360, aktivitas, pipeline, follow-up, pengajuan, target dan laporan.",
   "lang": "id-ID",
   "start_url": "./index.html",
   "display": "standalone",
