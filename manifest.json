@@ -1,11 +1,11 @@
 {
-  "name": "CRM Super App v40 - Unified Workspace",
+  "name": "CRM PRO — Customer Relationship Management",
   "short_name": "CRM Super App",
-  "description": "Unified Workspace: nasabah, aktivitas, pipeline, kinerja, laporan dan administrasi.",
+  "description": "CRM profesional Bankaltimtara untuk pengelolaan nasabah, aktivitas, pipeline, laporan dan administrasi.",
   "lang": "id-ID",
   "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#F2F5F9",
-  "theme_color": "#102B46",
+  "background_color": "#F4F7FB",
+  "theme_color": "#075AA6",
   "orientation": "any"
 }
