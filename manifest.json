@@ -1,7 +1,7 @@
 {
-  "name": "CRM Super App - Corporate Banking",
+  "name": "CRM Super App v39 - Unified Workspace",
   "short_name": "CRM Super App",
-  "description": "Workspace CRM, tindak lanjut, pipeline, kinerja dan laporan.",
+  "description": "Unified Workspace: nasabah, aktivitas, pipeline, kinerja, laporan dan administrasi.",
   "lang": "id-ID",
   "start_url": "./index.html",
   "display": "standalone",

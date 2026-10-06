@@ -272,6 +272,10 @@
       <main class="p-4 w-full max-w-md mx-auto no-print">
         
         <section id="view-input" class="view-section hidden animate-fade-in space-y-4">
+          <div class="flex flex-wrap gap-2">
+            <button onclick="switchMenu('riwayat')" class="rounded-xl bg-white border border-slate-200 text-slate-700 px-3 py-2 text-[10px] font-extrabold"><i class="fa-solid fa-clock-rotate-left mr-1"></i> RIWAYAT & ARSIP</button>
+            <button onclick="switchMenu('pipeline')" class="rounded-xl bg-blue-50 border border-blue-100 text-blue-800 px-3 py-2 text-[10px] font-extrabold"><i class="fa-solid fa-diagram-project mr-1"></i> PIPELINE & TUGAS</button>
+          </div>
           <div class="bg-white p-6 rounded-3xl card-shadow">
             <h2 class="text-sm font-extrabold text-bpd-blue mb-5 flex items-center uppercase tracking-wider"><i class="fa-solid fa-pen-to-square text-bpd-orange mr-2.5 text-lg"></i> INPUT PENAWARAN</h2>
             <form id="formInput" class="space-y-4">
@@ -321,6 +325,11 @@
         </section>
 
         <section id="view-pipeline" class="view-section hidden animate-fade-in space-y-4">
+          <div class="flex flex-wrap gap-2">
+            <button onclick="switchMenu('v38')" class="rounded-xl bg-blue-50 border border-blue-100 text-blue-800 px-3 py-2 text-[10px] font-extrabold"><i class="fa-solid fa-users mr-1"></i> PROFIL NASABAH</button>
+            <button onclick="switchMenu('crm')" class="rounded-xl bg-white border border-slate-200 text-slate-700 px-3 py-2 text-[10px] font-extrabold"><i class="fa-solid fa-address-card mr-1"></i> CRM LANJUTAN</button>
+            <button onclick="switchMenu('riwayat')" class="rounded-xl bg-white border border-slate-200 text-slate-700 px-3 py-2 text-[10px] font-extrabold"><i class="fa-solid fa-clock-rotate-left mr-1"></i> RIWAYAT</button>
+          </div>
           <div class="flex bg-white rounded-2xl card-shadow p-1"><button onclick="togglePipelineTab('aktif')" id="tabAktif" class="flex-1 tab-btn active">🔥 TUGAS SAYA</button><button onclick="togglePipelineTab('tunggu')" id="tabTunggu" class="flex-1 tab-btn">⏳ OPER KE REKAN</button></div>
           <div id="pipeContentAktif" class="space-y-4"></div><div id="pipeContentTunggu" class="space-y-4 hidden"></div>
         </section>
@@ -374,6 +383,10 @@
 
 
         <section id="view-crm" class="view-section hidden animate-fade-in space-y-4 pb-6">
+          <div class="flex flex-wrap gap-2">
+            <button onclick="switchMenu('v38')" class="rounded-xl bg-blue-50 text-blue-800 border border-blue-100 px-3 py-2 text-[10px] font-extrabold"><i class="fa-solid fa-users mr-1"></i> PROFIL & WORKSPACE NASABAH</button>
+            <button onclick="switchMenu('riwayat')" class="rounded-xl bg-slate-100 text-slate-700 border border-slate-200 px-3 py-2 text-[10px] font-extrabold"><i class="fa-solid fa-clock-rotate-left mr-1"></i> RIWAYAT & ARSIP</button>
+          </div>
           <div class="bg-gradient-to-br from-[#004A8D] to-[#002D5A] text-white p-5 rounded-3xl shadow-lg">
             <p class="text-[10px] tracking-[.2em] font-extrabold text-blue-200 uppercase">CRM WORKSPACE</p>
             <h2 class="text-xl font-black mt-1">Pusat Relasi Nasabah</h2>
@@ -456,9 +469,15 @@
         </section>
 
         <section id="view-admin" class="view-section hidden animate-fade-in space-y-4">
-           <div class="flex bg-white rounded-2xl card-shadow p-1 mb-2 uppercase"><button onclick="toggleAdminTab('staf')" id="tabAdminStaf" class="flex-1 admin-tab active">MANAJEMEN STAF</button><button onclick="toggleAdminTab('produk')" id="tabAdminProduk" class="flex-1 admin-tab">KATALOG PRODUK</button></div>
-           <div id="adminContentStaf" class="space-y-4"><button onclick="openStaffForm('ADD')" class="w-full bg-emerald-50 text-emerald-600 border border-emerald-200 hover:bg-emerald-100 text-xs font-bold py-3 rounded-xl shadow-sm transition-colors uppercase"><i class="fa-solid fa-plus mr-1"></i> TAMBAH STAF BARU</button><div id="manageStaffContainer" class="space-y-3 pb-4"></div></div>
+           <div class="rounded-3xl p-5 text-white shadow-lg" style="background:linear-gradient(120deg,#102B46,#2877B8)"><p class="text-[10px] tracking-[.2em] font-extrabold text-blue-200 uppercase">ADMINISTRASI & KONTROL</p><h2 class="text-xl font-black mt-1">Pengelolaan Sistem</h2><p class="text-xs text-blue-100 mt-1">Pengguna, master produk, pemeriksaan sistem, dan akses pengawasan dalam satu area.</p></div>
+           <div class="grid grid-cols-3 gap-1 bg-white rounded-2xl card-shadow p-1 mb-2 uppercase"><button onclick="toggleAdminTab('staf')" id="tabAdminStaf" class="admin-tab active">Pengguna</button><button onclick="toggleAdminTab('produk')" id="tabAdminProduk" class="admin-tab">Master Data</button><button onclick="toggleAdminTab('sistem')" id="tabAdminSistem" class="admin-tab">Sistem & Audit</button></div>
+           <div id="adminContentStaf" class="space-y-4"><button onclick="openStaffForm('ADD')" class="w-full bg-emerald-50 text-emerald-600 border border-emerald-200 hover:bg-emerald-100 text-xs font-bold py-3 rounded-xl shadow-sm transition-colors uppercase"><i class="fa-solid fa-plus mr-1"></i> TAMBAH PENGGUNA</button><div id="manageStaffContainer" class="space-y-3 pb-4"></div></div>
            <div id="adminContentProduk" class="space-y-4 hidden"><button onclick="openProductForm('ADD')" class="w-full bg-indigo-50 text-indigo-600 border border-indigo-200 hover:bg-indigo-100 text-xs font-bold py-3 rounded-xl shadow-sm transition-colors uppercase"><i class="fa-solid fa-plus mr-1"></i> TAMBAH PRODUK BARU</button><div id="manageProductContainer" class="space-y-3 pb-4"></div></div>
+           <div id="adminContentSistem" class="hidden space-y-3">
+             <div class="bg-white rounded-2xl card-shadow p-4"><div class="flex items-start gap-3"><div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-700 flex items-center justify-center"><i class="fa-solid fa-heart-pulse"></i></div><div class="flex-1"><h3 class="text-sm font-black text-slate-800">Kesehatan sistem</h3><p class="text-xs text-slate-500 mt-1">Jalankan pemeriksaan skema database dan komponen backend yang tersedia.</p><button onclick="openAdminSystemHealth()" class="mt-3 rounded-xl bg-bpd-blue text-white px-4 py-2.5 text-xs font-extrabold"><i class="fa-solid fa-stethoscope mr-1"></i> PERIKSA SISTEM</button></div></div></div>
+             <div class="bg-white rounded-2xl card-shadow p-4"><div class="flex items-start gap-3"><div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-700 flex items-center justify-center"><i class="fa-solid fa-clock-rotate-left"></i></div><div class="flex-1"><h3 class="text-sm font-black text-slate-800">Riwayat & pengawasan</h3><p class="text-xs text-slate-500 mt-1">Buka histori aktivitas untuk meninjau catatan kerja dan status berdasarkan filter.</p><button onclick="switchMenu('riwayat')" class="mt-3 rounded-xl border border-slate-200 bg-slate-50 text-slate-700 px-4 py-2.5 text-xs font-extrabold">BUKA RIWAYAT AKTIVITAS</button></div></div></div>
+             <div class="bg-slate-50 border border-slate-200 rounded-2xl p-3 text-[10px] leading-relaxed text-slate-600">Catatan: halaman ini hanya menampilkan fungsi pengawasan yang tersedia pada implementasi saat ini. Tidak ada menu audit baru yang mengklaim membaca log server secara langsung; untuk audit formal, gunakan data sumber dan prosedur internal yang berlaku.</div>
+           </div>
         </section>
       </main>
      <nav id="bottomNav" class="fixed bottom-0 left-0 w-full md:w-28 md:h-screen md:top-0 md:flex-col md:justify-center md:items-center glass-nav flex justify-around items-center pb-safe pt-2 md:pt-0 px-2 md:px-0 z-50 no-print border-t md:border-t-0 md:border-r border-slate-200/60 transition-all duration-500"></nav>
@@ -466,7 +485,13 @@
 
   <section id="view-v38" class="view-section hidden animate-fade-in space-y-4 pb-8">
     <div class="rounded-3xl p-5 md:p-7 text-white shadow-lg" style="background:linear-gradient(120deg,#102B46,#2877B8)">
-      <div class="flex flex-wrap items-start justify-between gap-3"><div><p class="text-[10px] font-black tracking-[.2em] uppercase text-blue-100">CRM SUPER APP • V38</p><h2 class="text-2xl md:text-3xl font-black mt-2">Pusat Operasional</h2><p class="text-sm text-blue-100 mt-2 max-w-2xl">Kelola profil nasabah, agenda tindak lanjut, dan pengajuan dalam satu workspace.</p></div><button onclick="v38Refresh()" class="rounded-xl bg-white/15 hover:bg-white/25 px-4 py-3 text-xs font-black"><i class="fa-solid fa-rotate mr-2"></i>MUAT ULANG</button></div>
+      <div class="flex flex-wrap items-start justify-between gap-3"><div><p class="text-[10px] font-black tracking-[.2em] uppercase text-blue-100">CRM SUPER APP • V39 UNIFIED WORKSPACE</p><h2 class="text-2xl md:text-3xl font-black mt-2">Pusat Operasional</h2><p class="text-sm text-blue-100 mt-2 max-w-2xl">Profil nasabah, agenda tindak lanjut, dan pengajuan dalam satu workspace.</p></div><button onclick="v38Refresh()" class="rounded-xl bg-white/15 hover:bg-white/25 px-4 py-3 text-xs font-black"><i class="fa-solid fa-rotate mr-2"></i>MUAT ULANG</button></div>
+    </div>
+    <div class="flex flex-wrap gap-2">
+      <button onclick="switchMenu('crm')" class="rounded-xl bg-white border border-slate-200 text-slate-700 px-3 py-2 text-[10px] font-extrabold"><i class="fa-solid fa-address-card mr-1"></i> CRM LANJUTAN</button>
+      <button onclick="switchMenu('riwayat')" class="rounded-xl bg-white border border-slate-200 text-slate-700 px-3 py-2 text-[10px] font-extrabold"><i class="fa-solid fa-clock-rotate-left mr-1"></i> RIWAYAT & ARSIP</button>
+      <button onclick="switchMenu('input')" class="rounded-xl bg-orange-50 border border-orange-100 text-orange-800 px-3 py-2 text-[10px] font-extrabold"><i class="fa-solid fa-plus mr-1"></i> CATAT AKTIVITAS</button>
+      <button id="v39AdminHealthShortcut" onclick="v38CheckHealth()" class="hidden rounded-xl bg-slate-100 border border-slate-200 text-slate-700 px-3 py-2 text-[10px] font-extrabold"><i class="fa-solid fa-heart-pulse mr-1"></i> CEK KESEHATAN SISTEM</button>
     </div>
     <div id="v38Status" class="hidden rounded-xl p-3 text-sm font-bold"></div>
     <div id="v38Kpis" class="grid grid-cols-2 lg:grid-cols-4 gap-3"></div>
@@ -490,7 +515,7 @@
   <div id="printArea" class="hidden"></div>
 
   <script>
-    const GAS_API_URL = "https://script.google.com/macros/s/AKfycbxCcbnyrRyl89-mR3Ch5SdlfgXuEdzrdB5BilXVBR3AQcF5RZ0FWcaAHrhikru7XuCW/exec"; 
+    const GAS_API_URL = "https://script.google.com/macros/s/AKfycbzzzBrxR0j3fJJHhGU4E1s1iqBljHvzUEk5mUtdEcmnrcNxDOEqOvQiuL9B_jlTgWWa/exec"; 
 
     let isSubmittingAction = false; 
     let optDelegasiFull = "";
@@ -654,7 +679,7 @@
       document.getElementById('kpiTitle').innerText = (activeUser.role === "ADMIN") ? "TARGET TIM" : "TARGET PRIBADI";
       renderNavigation();
       if(activeUser.role === "ADMIN") { document.getElementById('leaderboardSection').classList.remove('hidden'); switchMenu('kpi'); }
-      else { document.getElementById('leaderboardSection').classList.add('hidden'); switchMenu('input'); }
+      else { document.getElementById('leaderboardSection').classList.add('hidden'); switchMenu('kpi'); }
       let selRiwayat = document.getElementById('filterRiwayatStaff'); let optsRiwayat = '<option value="ALL">SEMUA STAF TERLIBAT</option>';
       allUsers.forEach(u => { if(activeUser.role === "ADMIN" || u.id === activeUser.id) optsRiwayat += '<option value="' + u.id + '">' + u.nama + '</option>'; });
       selRiwayat.innerHTML = optsRiwayat; document.getElementById('filterRiwayatStaff').value = "ALL";
@@ -874,60 +899,51 @@
       try { callGAS('logReportExport', { userId:activeUser.id, reportType:'PRINT_PDF', periodStart:reportDateLabel('filterStart'), periodEnd:reportDateLabel('filterEnd'), rowCount:(printData.history||[]).length, adminPin:adminSessionPin }).catch(()=>{}); } catch(e) {}
     }
 
+    // Unified navigation v39: fewer primary destinations; legacy workspaces remain accessible via contextual shortcuts.
     function renderNavigation() {
-        let nav = document.getElementById('bottomNav'); 
-        let html = '';
-        
-        // Helper function agar kode lebih bersih & seragam
+        const nav = document.getElementById('bottomNav');
         const createNavBtn = (id, icon, label, hasBadge = false) => {
-            let badge = hasBadge ? '<span id="navAlert" class="absolute top-1 right-2 md:top-2 md:right-3 bg-rose-500 w-2.5 h-2.5 rounded-full border-2 border-white hidden shadow-md pulse-red"></span>' : '';
-            return `
-            <button id="nav-${id}" onclick="switchMenu('${id}')" class="nav-item relative flex flex-col items-center justify-center w-full md:w-20 h-14 md:h-20 md:my-3 rounded-2xl group">
-                <i class="fa-solid ${icon} text-[20px] md:text-[24px] mb-1 md:mb-1.5 transition-transform duration-300"></i>
-                <span class="text-[9px] font-extrabold tracking-wide uppercase">${label}</span>
-                ${badge}
+            const badge = hasBadge ? '<span id="navAlert" class="absolute top-1 right-2 md:top-2 md:right-3 bg-rose-500 w-2.5 h-2.5 rounded-full border-2 border-white hidden shadow-md pulse-red"></span>' : '';
+            return `<button id="nav-${id}" onclick="switchMenu('${id}')" class="nav-item relative flex flex-col items-center justify-center flex-1 md:flex-none md:w-20 h-14 md:h-20 md:my-2 rounded-2xl group px-1">
+                <i class="fa-solid ${icon} text-[18px] md:text-[24px] mb-1 md:mb-1.5 transition-transform duration-300"></i>
+                <span class="text-[8px] md:text-[9px] font-extrabold tracking-wide uppercase text-center leading-tight">${label}</span>${badge}
             </button>`;
         };
-
-        if(activeUser.role === 'ADMIN') {
-            html += createNavBtn('kpi', 'fa-chart-pie', 'Kinerja');
-            html += createNavBtn('pipeline', 'fa-users-viewfinder', 'Pantauan', true);
-            html += createNavBtn('crm', 'fa-address-card', 'CRM');
-            html += createNavBtn('v38', 'fa-layer-group', 'Workspace');
-            html += createNavBtn('reports', 'fa-file-lines', 'Laporan');
-            html += createNavBtn('riwayat', 'fa-clock-rotate-left', 'Riwayat');
-            html += createNavBtn('admin', 'fa-server', 'Sistem');
-        } else {
-            html += createNavBtn('input', 'fa-keyboard', 'Input');
-            html += createNavBtn('pipeline', 'fa-users-viewfinder', 'Tugas', true);
-            html += createNavBtn('crm', 'fa-address-card', 'CRM');
-            html += createNavBtn('v38', 'fa-layer-group', 'Workspace');
-            html += createNavBtn('reports', 'fa-file-lines', 'Laporan');
-            html += createNavBtn('kpi', 'fa-chart-pie', 'Kinerja');
-            html += createNavBtn('riwayat', 'fa-clock-rotate-left', 'Riwayat');
-        }
-        
+        let html = '';
+        html += createNavBtn('kpi', 'fa-chart-pie', 'Dashboard');
+        html += createNavBtn('v38', 'fa-users', 'Nasabah');
+        html += createNavBtn('input', 'fa-calendar-check', 'Aktivitas');
+        html += createNavBtn('pipeline', 'fa-diagram-project', 'Pipeline', true);
+        html += createNavBtn('reports', 'fa-chart-column', 'Laporan');
+        if (activeUser.role === 'ADMIN') html += createNavBtn('admin', 'fa-shield-halved', 'Admin');
         nav.innerHTML = html;
-        
-        // Opsional: Tambahkan logo kecil bankaltimtara di bagian atas Sidebar khusus PC
-        if(window.innerWidth >= 768) {
-            nav.innerHTML = `
-            <div class="absolute top-6 left-0 w-full flex justify-center hidden md:flex">
-                <div class="w-12 h-12 bg-bpd-blue text-white rounded-2xl shadow-lg flex items-center justify-center text-xl font-black">
-                    129
-                </div>
+        if (window.innerWidth >= 768) {
+            nav.innerHTML = `<div class="absolute top-5 left-0 w-full flex justify-center">
+                <div class="w-11 h-11 bg-bpd-blue text-white rounded-2xl shadow-lg flex items-center justify-center text-lg font-black">129</div>
             </div>` + nav.innerHTML;
         }
     }
 
     function switchMenu(viewId) {
-      if(viewId === 'input') requestLocationUpdate();
-      if(viewId === 'crm') switchCRMTab(crmCurrentTab || 'follow');
-      if(viewId === 'v38' && typeof v38Refresh === 'function') v38Refresh();
-      if(viewId === 'reports' && printData) renderReports(printData);
-      document.querySelectorAll('.view-section').forEach(el => el.classList.add('hidden')); document.getElementById('view-' + viewId).classList.remove('hidden');
-      document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active')); document.getElementById('nav-' + viewId).classList.add('active');
-      if(viewId === 'admin') renderManageStaffUI(); else if(viewId !== 'input') refreshDataServer();
+      // Legacy views are preserved and grouped under their nearest primary destination.
+      if (viewId === 'admin' && (!activeUser || activeUser.role !== 'ADMIN')) {
+        alert('Menu Administrasi hanya tersedia untuk Admin.');
+        return;
+      }
+      if (viewId === 'input') requestLocationUpdate();
+      if (viewId === 'crm') switchCRMTab(crmCurrentTab || 'follow');
+      if (viewId === 'v38' && typeof v38Refresh === 'function') v38Refresh();
+      if (viewId === 'reports' && printData) renderReports(printData);
+      const target = document.getElementById('view-' + viewId);
+      if (!target) { console.warn('Menu tidak ditemukan:', viewId); return; }
+      document.querySelectorAll('.view-section').forEach(el => el.classList.add('hidden'));
+      target.classList.remove('hidden');
+      document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+      const navMap = { kpi:'kpi', v38:'v38', crm:'v38', input:'input', riwayat:'input', pipeline:'pipeline', reports:'reports', admin:'admin' };
+      const activeNav = document.getElementById('nav-' + (navMap[viewId] || viewId));
+      if (activeNav) activeNav.classList.add('active');
+      if (viewId === 'admin') renderManageStaffUI();
+      else if (viewId !== 'input') refreshDataServer();
     }
 
     function togglePipelineTab(tipe) {
@@ -938,10 +954,20 @@
     }
 
     function toggleAdminTab(tipe) {
-        document.getElementById('tabAdminStaf').classList.remove('active'); document.getElementById('tabAdminProduk').classList.remove('active');
-        document.getElementById('adminContentStaf').classList.add('hidden'); document.getElementById('adminContentProduk').classList.add('hidden');
-        if(tipe === 'staf') { document.getElementById('tabAdminStaf').classList.add('active'); document.getElementById('adminContentStaf').classList.remove('hidden'); } 
-        else { document.getElementById('tabAdminProduk').classList.add('active'); document.getElementById('adminContentProduk').classList.remove('hidden'); }
+        const tabs = {staf:'tabAdminStaf', produk:'tabAdminProduk', sistem:'tabAdminSistem'};
+        const panels = {staf:'adminContentStaf', produk:'adminContentProduk', sistem:'adminContentSistem'};
+        Object.values(tabs).forEach(id => document.getElementById(id)?.classList.remove('active'));
+        Object.values(panels).forEach(id => document.getElementById(id)?.classList.add('hidden'));
+        const tab = document.getElementById(tabs[tipe] || tabs.staf);
+        const panel = document.getElementById(panels[tipe] || panels.staf);
+        if (tab) tab.classList.add('active');
+        if (panel) panel.classList.remove('hidden');
+    }
+
+    function openAdminSystemHealth() {
+        if (!activeUser || activeUser.role !== 'ADMIN') { alert('Pemeriksaan sistem hanya tersedia untuk Admin.'); return; }
+        switchMenu('v38');
+        window.setTimeout(() => { if (typeof v38CheckHealth === 'function') v38CheckHealth(); }, 250);
     }
 
     function renderManageStaffUI() {
@@ -1482,6 +1508,6 @@
         callGAS("getAppInitData").then(initData => { initGateway(initData); }).catch(err => { let s = document.getElementById('loginUserSelect'); if(s) s.innerHTML = '<option value="">ERROR KONEKSI SERVER</option>'; });
     });
   </script>
-  <script src="./v38.js"></script>
+  <script src="./v38.js?v=39"></script>
 </body>
 </html>
