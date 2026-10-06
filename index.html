@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <meta name="theme-color" content="#004A8D">
+  <meta name="theme-color" content="#102B46">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="CRM PRO">
@@ -399,6 +399,62 @@
           </div>
         </section>
 
+
+        <section id="view-reports" class="view-section hidden animate-fade-in space-y-4 pb-8">
+          <div class="rounded-3xl p-5 text-white shadow-lg" style="background:linear-gradient(125deg,#102B46,#174D7A)">
+            <div class="flex flex-wrap items-start justify-between gap-3">
+              <div><p class="text-[10px] tracking-[.2em] font-extrabold text-blue-200 uppercase">MANAGEMENT INFORMATION SYSTEM</p>
+                <h2 class="text-xl md:text-2xl font-black mt-1">Pusat Laporan & Analisis</h2>
+                <p class="text-xs text-blue-100 mt-1 max-w-2xl">Ringkasan kinerja, tren, pipeline, tindak lanjut, dan detail aktivitas berdasarkan periode data yang sedang dimuat.</p>
+              </div>
+              <span class="text-[10px] rounded-full border border-white/30 bg-white/10 px-3 py-1.5 font-bold">WITA · CORPORATE BANKING</span>
+            </div>
+          </div>
+          <div class="bg-white rounded-2xl card-shadow p-4 space-y-3">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <div><h3 class="text-sm font-black text-slate-800">Periode laporan</h3><p class="text-[10px] text-slate-500">Mengikuti filter tanggal utama pada halaman Kinerja.</p></div>
+              <button onclick="refreshDataServer()" class="rounded-xl px-4 py-2 text-xs font-extrabold text-white" style="background:#174D7A"><i class="fa-solid fa-rotate mr-1"></i> MUAT ULANG</button>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+              <div class="rounded-xl bg-slate-50 p-3"><p class="text-[9px] font-bold text-slate-500 uppercase">Mulai</p><p id="reportPeriodStart" class="text-sm font-black text-slate-800">-</p></div>
+              <div class="rounded-xl bg-slate-50 p-3"><p class="text-[9px] font-bold text-slate-500 uppercase">Sampai</p><p id="reportPeriodEnd" class="text-sm font-black text-slate-800">-</p></div>
+              <div class="rounded-xl bg-slate-50 p-3"><p class="text-[9px] font-bold text-slate-500 uppercase">Dibuat pada</p><p id="reportGeneratedAt" class="text-sm font-black text-slate-800">-</p></div>
+              <div class="rounded-xl bg-blue-50 p-3"><p class="text-[9px] font-bold text-blue-700 uppercase">Cakupan</p><p id="reportScope" class="text-sm font-black text-blue-900">-</p></div>
+            </div>
+            <div class="flex flex-wrap gap-2 pt-1">
+              <button onclick="exportReportCSV()" class="rounded-xl px-4 py-2.5 text-xs font-extrabold border border-slate-200 text-slate-700 bg-white hover:bg-slate-50"><i class="fa-solid fa-file-csv mr-1.5 text-emerald-700"></i> EKSPOR CSV DETAIL</button>
+              <button onclick="printReport()" class="rounded-xl px-4 py-2.5 text-xs font-extrabold text-white" style="background:#102B46"><i class="fa-solid fa-file-pdf mr-1.5"></i> CETAK / SIMPAN PDF</button>
+            </div>
+          </div>
+          <div id="reportKpiGrid" class="grid grid-cols-2 xl:grid-cols-4 gap-3"></div>
+          <div class="grid grid-cols-1 xl:grid-cols-2 gap-4">
+            <div class="bg-white rounded-2xl card-shadow p-4">
+              <div class="flex items-center justify-between mb-3"><div><h3 class="text-sm font-black text-slate-800">Komposisi pipeline</h3><p class="text-[10px] text-slate-500">Kasus unik berdasarkan status terakhir.</p></div><i class="fa-solid fa-chart-pie text-blue-700"></i></div>
+              <div id="reportPipelineBars" class="space-y-3"></div>
+            </div>
+            <div class="bg-white rounded-2xl card-shadow p-4">
+              <div class="flex items-center justify-between mb-3"><div><h3 class="text-sm font-black text-slate-800">Analisis & perhatian</h3><p class="text-[10px] text-slate-500">Indikator untuk prioritas pengelolaan.</p></div><i class="fa-solid fa-magnifying-glass-chart text-blue-700"></i></div>
+              <div id="reportInsights" class="space-y-2"></div>
+            </div>
+          </div>
+          <div class="bg-white rounded-2xl card-shadow p-4">
+            <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+              <div><h3 class="text-sm font-black text-slate-800">Detail kasus dan aktivitas</h3><p class="text-[10px] text-slate-500">Gunakan ekspor CSV untuk pengolahan lanjutan.</p></div>
+              <span id="reportDetailCount" class="rounded-full bg-slate-100 px-3 py-1 text-[10px] font-bold text-slate-600">0 baris</span>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="w-full min-w-[760px] text-left text-xs">
+                <thead><tr class="text-[9px] uppercase tracking-wider text-slate-500 border-b border-slate-200">
+                  <th class="py-3 px-2">Nasabah</th><th class="py-3 px-2">Produk</th><th class="py-3 px-2">Status</th><th class="py-3 px-2">Jumlah Aktivitas</th><th class="py-3 px-2">Aktivitas Terakhir</th><th class="py-3 px-2">Tim Terlibat</th>
+                </tr></thead><tbody id="reportDetailRows"></tbody>
+              </table>
+            </div>
+          </div>
+          <div class="rounded-xl border border-amber-200 bg-amber-50 p-3 text-[10px] leading-relaxed text-amber-900">
+            <strong>Catatan metodologi:</strong> laporan ini menghitung kasus unik yang tersedia pada hasil query dan periode aktif. Nilai nominal kredit/realisasi tidak ditampilkan karena skema sumber saat ini tidak menyimpan nominal pengajuan/realisasi. Konversi menggunakan closing ÷ (closing + prospek + ditolak), bukan konversi kohort murni. Untuk audit formal, gunakan LOG_AKTIVITAS dan arsip sumber sesuai prosedur internal.
+          </div>
+        </section>
+
         <section id="view-admin" class="view-section hidden animate-fade-in space-y-4">
            <div class="flex bg-white rounded-2xl card-shadow p-1 mb-2 uppercase"><button onclick="toggleAdminTab('staf')" id="tabAdminStaf" class="flex-1 admin-tab active">MANAJEMEN STAF</button><button onclick="toggleAdminTab('produk')" id="tabAdminProduk" class="flex-1 admin-tab">KATALOG PRODUK</button></div>
            <div id="adminContentStaf" class="space-y-4"><button onclick="openStaffForm('ADD')" class="w-full bg-emerald-50 text-emerald-600 border border-emerald-200 hover:bg-emerald-100 text-xs font-bold py-3 rounded-xl shadow-sm transition-colors uppercase"><i class="fa-solid fa-plus mr-1"></i> TAMBAH STAF BARU</button><div id="manageStaffContainer" class="space-y-3 pb-4"></div></div>
@@ -695,6 +751,100 @@
       detail.scrollIntoView({behavior:'smooth',block:'start'});
     }
 
+
+    function reportEscapeCsv(value) {
+      let s = String(value == null ? '' : value);
+      // Prevent spreadsheet formula execution when exported fields begin with formula characters.
+      if (/^[\\s\\u0000-\\u001f]*[=+@-]/.test(s)) s = "'" + s;
+      return '"' + s.replace(/"/g, '""') + '"';
+    }
+    function reportDownload(filename, content, mime) {
+      const blob = new Blob([content], { type: mime || 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob); const a = document.createElement('a');
+      a.href = url; a.download = filename; document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+    }
+    function reportDateLabel(id) {
+      const el = document.getElementById(id); return el && el.value ? el.value : 'Semua tanggal';
+    }
+    function renderReports(data) {
+      const root = document.getElementById('reportKpiGrid'); if (!root || !data) return;
+      const histories = Array.isArray(data.history) ? data.history : [];
+      const cases = histories.map(h => ({...h, logs: Array.isArray(h.logs) ? h.logs : []}));
+      const statusCount = { CLOSING: 0, PROSPEK: 0, DITOLAK: 0 };
+      cases.forEach(h => { const s = String(h.statusAkhir || '').toUpperCase(); if (statusCount[s] !== undefined) statusCount[s]++; });
+      const total = cases.length, closing = statusCount.CLOSING, prospect = statusCount.PROSPEK, rejected = statusCount.DITOLAK;
+      const conversion = total ? (closing / total * 100) : 0;
+      const allLogs = cases.flatMap(h => h.logs.map(l => ({...l, nasabah:h.nasabah, hp:h.hp, produk:h.produk, statusAkhir:h.statusAkhir, tim:h.tim})));
+      const activityCount = allLogs.length;
+      const overdueMine = (data.activeTasks || []).filter(t => t.overdue).length;
+      const overdueTeam = (data.delegatedTasks || []).filter(t => t.overdue).length;
+      const overdue = activeUser.role === 'ADMIN' ? overdueTeam : overdueMine;
+      const target = Number(data.stats && data.stats.target) || 0;
+      const attainment = target ? Number(data.stats.closing || 0) / target * 100 : 0;
+      const uniqueCustomers = new Set(cases.map(h => String(h.nasabah || '').trim().toLowerCase())).size;
+      const kpis = [
+        {label:'Kasus unik', value:total, sub:'Nasabah–produk dalam periode', icon:'fa-users', tone:'blue'},
+        {label:'Closing', value:closing, sub:'Status terakhir closing', icon:'fa-circle-check', tone:'green'},
+        {label:'Tingkat closing', value:conversion.toFixed(1)+'%', sub:'Closing ÷ seluruh kasus', icon:'fa-chart-line', tone:'navy'},
+        {label:'Aktivitas tercatat', value:activityCount, sub:'Seluruh log pada kasus terpilih', icon:'fa-list-check', tone:'blue'},
+        {label:'Nasabah unik', value:uniqueCustomers, sub:'Berdasarkan nama pada hasil query', icon:'fa-user-group', tone:'navy'},
+        {label:'Follow-up terlambat', value:overdue, sub:activeUser.role === 'ADMIN' ? 'Antrean tim yang terlambat' : 'Tugas saya yang terlambat', icon:'fa-clock', tone:overdue ? 'red' : 'green'},
+        {label:'Pencapaian target', value:attainment.toFixed(1)+'%', sub:`${Number(data.stats.closing)||0} closing dari target ${target}`, icon:'fa-bullseye', tone:'blue'},
+        {label:'Kasus ditolak', value:rejected, sub:'Status terakhir ditolak/lost', icon:'fa-circle-xmark', tone:'red'}
+      ];
+      const toneMap = {blue:'bg-blue-50 text-blue-800',navy:'bg-slate-100 text-slate-800',green:'bg-emerald-50 text-emerald-800',red:'bg-rose-50 text-rose-800'};
+      root.innerHTML = kpis.map(k => `<div class="bg-white rounded-2xl card-shadow p-4 min-w-0"><div class="flex items-start justify-between gap-2"><p class="text-[9px] font-extrabold tracking-wider text-slate-500 uppercase">${crmEsc(k.label)}</p><span class="w-8 h-8 rounded-xl flex items-center justify-center ${toneMap[k.tone]}"><i class="fa-solid ${k.icon}"></i></span></div><p class="text-2xl md:text-3xl font-black text-slate-900 mt-2 break-words">${crmEsc(k.value)}</p><p class="text-[9px] leading-relaxed text-slate-500 mt-1">${crmEsc(k.sub)}</p></div>`).join('');
+      const maxStatus = Math.max(1, closing, prospect, rejected);
+      const barColors = {CLOSING:'#16835D',PROSPEK:'#D99016',DITOLAK:'#C2415D'};
+      document.getElementById('reportPipelineBars').innerHTML = Object.entries(statusCount).map(([name,count]) => `<div><div class="flex justify-between text-xs mb-1"><span class="font-bold text-slate-700">${name}</span><span class="font-black text-slate-900">${count} <span class="text-slate-400 font-medium">(${total ? (count/total*100).toFixed(1) : '0.0'}%)</span></span></div><div class="h-2.5 rounded-full bg-slate-100 overflow-hidden"><div class="h-full rounded-full" style="width:${count/maxStatus*100}%;background:${barColors[name]}"></div></div></div>`).join('');
+      const followUpRate = (data.activeTasks || []).length + (data.delegatedTasks || []).length;
+      const insights = [
+        {title:'Prospek yang masih terbuka', value:prospect, note:'Perlu rencana tindak lanjut dan pemantauan aging.'},
+        {title:'Rasio closing', value:conversion.toFixed(1)+'%', note:conversion >= 30 ? 'Rasio relatif tinggi pada himpunan data ini; periksa konsistensi kualitas input.' : 'Tinjau kualitas prospek, alasan penolakan, dan kecepatan tindak lanjut.'},
+        {title:'Antrean tugas aktif', value:followUpRate, note:'Jumlah tugas saya dan/atau delegasi yang dikembalikan backend.'},
+        {title:'Kualitas interpretasi', value:'Perlu konteks', note:'Rasio ini bukan konversi kohort. Bandingkan periode dan definisi KPI yang sama.'}
+      ];
+      document.getElementById('reportInsights').innerHTML = insights.map((x,i) => `<div class="flex gap-3 rounded-xl p-3 ${i===1?'bg-blue-50':'bg-slate-50'}"><div class="w-8 h-8 shrink-0 rounded-lg bg-white flex items-center justify-center text-blue-800 font-black">${i+1}</div><div class="min-w-0 flex-1"><div class="flex flex-wrap justify-between gap-2"><p class="text-xs font-extrabold text-slate-800">${crmEsc(x.title)}</p><span class="text-xs font-black text-blue-900">${crmEsc(x.value)}</span></div><p class="text-[10px] text-slate-500 mt-1 leading-relaxed">${crmEsc(x.note)}</p></div></div>`).join('');
+      document.getElementById('reportDetailCount').innerText = `${cases.length} kasus`;
+      document.getElementById('reportDetailRows').innerHTML = cases.slice().sort((a,b) => String(a.nasabah||'').localeCompare(String(b.nasabah||''))).map(h => {
+        const latest = h.logs.length ? h.logs.reduce((a,b) => (a.timestamp||0) > (b.timestamp||0) ? a : b) : null;
+        return `<tr class="border-b border-slate-100 hover:bg-slate-50"><td class="py-3 px-2 font-bold text-slate-800">${crmEsc(h.nasabah||'-')}<div class="text-[10px] text-slate-400 font-normal">${crmEsc(h.hp||'')}</div></td><td class="py-3 px-2">${crmEsc(h.produk||'-')}</td><td class="py-3 px-2"><span class="rounded-full px-2 py-1 text-[9px] font-black ${h.statusAkhir==='CLOSING'?'bg-emerald-50 text-emerald-700':h.statusAkhir==='DITOLAK'?'bg-rose-50 text-rose-700':'bg-amber-50 text-amber-700'}">${crmEsc(h.statusAkhir||'-')}</span></td><td class="py-3 px-2 text-center font-bold">${h.logs.length}</td><td class="py-3 px-2">${crmEsc(latest ? latest.waktu : '-')}<div class="text-[10px] text-slate-500">${crmEsc(latest ? latest.aktor : '')}</div></td><td class="py-3 px-2">${crmEsc(h.tim||'-')}</td></tr>`;
+      }).join('') || '<tr><td colspan="6" class="text-center py-8 text-slate-400">Tidak ada data pada periode ini.</td></tr>';
+      document.getElementById('reportPeriodStart').innerText = reportDateLabel('filterStart');
+      document.getElementById('reportPeriodEnd').innerText = reportDateLabel('filterEnd');
+      document.getElementById('reportGeneratedAt').innerText = new Intl.DateTimeFormat('id-ID',{dateStyle:'medium',timeStyle:'short',timeZone:'Asia/Makassar'}).format(new Date());
+      document.getElementById('reportScope').innerText = activeUser.role === 'ADMIN' ? 'Tim / lintas staf' : 'Data pengguna aktif';
+    }
+    function exportReportCSV() {
+      const histories = Array.isArray(printData.history) ? printData.history : [];
+      if (!histories.length) { alert('Tidak ada data pada periode laporan untuk diekspor.'); return; }
+      const rows = [['Periode Mulai','Periode Akhir','Nama Nasabah','No HP','Produk','Status Terakhir','Jumlah Aktivitas','Waktu Aktivitas','Petugas','Catatan Aktivitas','Jenis Aktivitas','Tim Terlibat','Link Bukti']];
+      histories.forEach(h => {
+        const logs = Array.isArray(h.logs) && h.logs.length ? h.logs : [null];
+        logs.forEach(l => rows.push([
+          reportDateLabel('filterStart'), reportDateLabel('filterEnd'), h.nasabah || '', h.hp || '', h.produk || '', h.statusAkhir || '',
+          (h.logs||[]).length, l ? l.waktu : '', l ? l.aktor : '', l ? l.catatan : '', l ? l.jenis : '', h.tim || '', l ? l.bukti : ''
+        ]));
+      });
+      const csv = '\uFEFF' + rows.map(r => r.map(reportEscapeCsv).join(',')).join('\r\n');
+      const stamp = new Date().toISOString().slice(0,10);
+      reportDownload(`CRM_Laporan_Detail_${stamp}.csv`, csv, 'text/csv;charset=utf-8;');
+      try { callGAS('logReportExport', { userId:activeUser.id, reportType:'DETAIL_CSV', periodStart:reportDateLabel('filterStart'), periodEnd:reportDateLabel('filterEnd'), rowCount:rows.length-1, adminPin:adminSessionPin }).catch(()=>{}); } catch(e) {}
+    }
+    function printReport() {
+      const source = document.getElementById('view-reports');
+      if (!source) return;
+      const clone = source.cloneNode(true);
+      clone.querySelectorAll('button').forEach(b => b.remove());
+      clone.classList.remove('hidden'); clone.style.display = 'block'; clone.style.padding = '18px'; clone.style.background = '#fff';
+      const win = window.open('', '_blank');
+      if (!win) { alert('Popup diblokir browser. Izinkan popup untuk mencetak laporan.'); return; }
+      win.document.write(`<!doctype html><html lang="id"><head><meta charset="utf-8"><title>Laporan CRM</title><style>body{font:12px Arial,sans-serif;color:#172b3d;margin:24px}h2,h3{margin:8px 0}table{border-collapse:collapse;width:100%;font-size:10px}td,th{padding:7px;border:1px solid #d7e0e8;text-align:left}th{background:#102B46;color:white}section{display:block!important}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.rounded-2xl,.rounded-3xl{border-radius:8px}.bg-white{background:white}.text-white{color:white}.p-4,.p-5{padding:10px}.text-slate-500{color:#526578}.text-slate-800{color:#102B46}@media print{body{margin:10mm}.no-print{display:none}}</style></head><body>${clone.innerHTML}<script>window.onload=()=>window.print();<\/script></body></html>`);
+      win.document.close();
+      try { callGAS('logReportExport', { userId:activeUser.id, reportType:'PRINT_PDF', periodStart:reportDateLabel('filterStart'), periodEnd:reportDateLabel('filterEnd'), rowCount:(printData.history||[]).length, adminPin:adminSessionPin }).catch(()=>{}); } catch(e) {}
+    }
+
     function renderNavigation() {
         let nav = document.getElementById('bottomNav'); 
         let html = '';
@@ -714,12 +864,14 @@
             html += createNavBtn('kpi', 'fa-chart-pie', 'Kinerja');
             html += createNavBtn('pipeline', 'fa-users-viewfinder', 'Pantauan', true);
             html += createNavBtn('crm', 'fa-address-card', 'CRM');
+            html += createNavBtn('reports', 'fa-file-lines', 'Laporan');
             html += createNavBtn('riwayat', 'fa-clock-rotate-left', 'Riwayat');
             html += createNavBtn('admin', 'fa-server', 'Sistem');
         } else {
             html += createNavBtn('input', 'fa-keyboard', 'Input');
             html += createNavBtn('pipeline', 'fa-users-viewfinder', 'Tugas', true);
             html += createNavBtn('crm', 'fa-address-card', 'CRM');
+            html += createNavBtn('reports', 'fa-file-lines', 'Laporan');
             html += createNavBtn('kpi', 'fa-chart-pie', 'Kinerja');
             html += createNavBtn('riwayat', 'fa-clock-rotate-left', 'Riwayat');
         }
@@ -740,6 +892,7 @@
     function switchMenu(viewId) {
       if(viewId === 'input') requestLocationUpdate();
       if(viewId === 'crm') switchCRMTab(crmCurrentTab || 'follow');
+      if(viewId === 'reports' && printData) renderReports(printData);
       document.querySelectorAll('.view-section').forEach(el => el.classList.add('hidden')); document.getElementById('view-' + viewId).classList.remove('hidden');
       document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active')); document.getElementById('nav-' + viewId).classList.add('active');
       if(viewId === 'admin') renderManageStaffUI(); else if(viewId !== 'input') refreshDataServer();
@@ -923,6 +1076,7 @@
       .then(data => {
         printData = data; 
         renderCRMWorkspace(data);
+        renderReports(data);
         let htmlDl = ""; data.uniqueNasabah.forEach(n => { htmlDl += '<option value="' + n.nama + '">'; }); document.getElementById('nasabahList').innerHTML = htmlDl;
 
         const s = data.stats;
