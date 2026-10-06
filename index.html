@@ -8,7 +8,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="CRM PRO">
   <link rel="manifest" href="manifest.json">
-  <title>CROSS SELLING 129 - BANKALTIMTARA KCP BABULU</title>
+  <title>CRM PRO — Bankaltimtara KCP Babulu</title>
   
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
@@ -79,6 +79,66 @@
     } 
     .nav-item.active i { transform: scale(1.15); }
     .nav-item:hover:not(.active) { transform: translateY(-2px); color: #004A8D; }
+    /* V40 VISUAL SYSTEM — professional, calm, mobile-first */
+    :root { --crm-navy:#103B63; --crm-blue:#075AA6; --crm-orange:#F47A20; --crm-ink:#172B42; --crm-muted:#718096; --crm-line:#E3EAF1; --crm-canvas:#F4F7FB; }
+    html { scroll-behavior:smooth; }
+    body { background:var(--crm-canvas); color:var(--crm-ink); letter-spacing:-.01em; }
+    #mainApp { min-height:100vh; background:linear-gradient(180deg,#F7F9FC 0%,#F3F6FA 100%); }
+    #mainApp > .bg-bpd-blue:first-child { background:linear-gradient(115deg,#073B70 0%,#075AA6 62%,#1677B9 100%); box-shadow:0 8px 24px rgba(9,54,96,.16); padding-top:max(1rem,env(safe-area-inset-top)); padding-bottom:1rem; }
+    #mainApp > .bg-bpd-blue:first-child h1 { font-size:clamp(1.2rem,3.5vw,1.55rem); letter-spacing:-.045em; }
+    #mainApp > .bg-bpd-blue:first-child h1 span { color:#FF9B50!important; }
+    #mainApp > .bg-bpd-blue:first-child p { font-size:10px; letter-spacing:.19em; color:#D7E9FA; }
+    #mainApp > .bg-bpd-blue:first-child button { min-width:36px; min-height:36px; border-radius:12px; }
+    #mainApp > .bg-white.sticky { background:rgba(255,255,255,.92); backdrop-filter:blur(18px); -webkit-backdrop-filter:blur(18px); border-color:#E5EBF2; }
+    #mainApp > .bg-white.sticky input[type=date] { min-height:36px; border-radius:10px; background:#F7F9FC; padding:7px 9px; font-size:11px; }
+    #mainApp > .bg-white.sticky button { min-width:38px; min-height:36px; border-radius:10px; }
+    #mainApp main { max-width:1440px; width:100%; padding:clamp(14px,2.2vw,30px); margin:0 auto; }
+    .view-section { animation:crmPageIn .24s ease-out both; }
+    @keyframes crmPageIn { from {opacity:0; transform:translateY(6px)} to {opacity:1; transform:translateY(0)} }
+    .card-shadow, .view-section .bg-white.rounded-2xl, .view-section .bg-white.rounded-3xl { background:#fff; border:1px solid var(--crm-line); box-shadow:0 4px 16px rgba(16,59,99,.045),0 1px 2px rgba(16,59,99,.035); }
+    .view-section .rounded-2xl, .view-section .rounded-3xl { border-radius:18px; }
+    .view-section h2, .view-section h3 { letter-spacing:-.035em; }
+    .view-section input:not([type=checkbox]):not([type=radio]):not([type=file]), .view-section select, .view-section textarea { border-color:#DCE5EF; border-radius:12px; transition:border-color .18s,box-shadow .18s,background .18s; }
+    .view-section input:focus, .view-section select:focus, .view-section textarea:focus { outline:none; border-color:#3788C8!important; box-shadow:0 0 0 3px rgba(7,90,166,.10); background:#fff; }
+    .view-section button, #modalGlobalSearch button, #modalNotif button { transition:transform .16s ease, box-shadow .16s ease, filter .16s ease; }
+    .view-section button:active, #bottomNav button:active { transform:scale(.98); }
+    .view-section button.bg-bpd-blue, .view-section button.bg-\[\#102B46\], .view-section button.bg-\[\#2877B8\] { box-shadow:0 5px 12px rgba(7,90,166,.16); }
+    #bottomNav { background:rgba(255,255,255,.94); backdrop-filter:blur(22px); -webkit-backdrop-filter:blur(22px); border-color:#E4EAF1!important; box-shadow:0 -8px 30px rgba(16,43,70,.08); padding-top:7px!important; padding-bottom:calc(env(safe-area-inset-bottom) + 7px)!important; }
+    #bottomNav .nav-item { min-width:0; min-height:54px; gap:2px; color:#8A98AA; border-radius:15px; margin:0 1px; padding:7px 2px; }
+    #bottomNav .nav-item i { font-size:17px!important; margin-bottom:2px!important; }
+    #bottomNav .nav-item span { font-size:8px!important; letter-spacing:.035em; font-weight:800; }
+    #bottomNav .nav-item.active { color:var(--crm-orange); background:linear-gradient(180deg,rgba(244,122,32,.12),rgba(244,122,32,.045)); transform:translateY(-2px); }
+    #bottomNav .nav-item.active::before { content:""; position:absolute; top:0; left:30%; right:30%; height:3px; border-radius:0 0 5px 5px; background:var(--crm-orange); }
+    #bottomNav .nav-item.active i { transform:none; }
+    .input-field { background:#F7F9FC; border:1px solid #DCE5EF; text-transform:none; }
+    .input-field::placeholder, .view-section input::placeholder, .view-section textarea::placeholder { color:#9AA8B8; font-weight:500; }
+    #view-v38 > .rounded-3xl:first-child { background:linear-gradient(120deg,#103B63 0%,#075AA6 65%,#2B7EB7 100%)!important; box-shadow:0 14px 32px rgba(7,65,116,.18); border:1px solid rgba(255,255,255,.14); }
+    #view-v38 > .rounded-3xl:first-child h2 { font-size:clamp(1.5rem,4vw,2.2rem); letter-spacing:-.045em; }
+    #view-v38 > .rounded-3xl:first-child button { background:rgba(255,255,255,.15); border:1px solid rgba(255,255,255,.18); border-radius:13px; }
+    #v38Kpis > div { border-radius:18px; padding:17px!important; background:linear-gradient(145deg,#fff,#F9FBFE); border:1px solid #E1E9F1; box-shadow:0 4px 14px rgba(16,59,99,.04); }
+    #v38Customers > *, #v38Tasks > *, #v38Applications > * { border-radius:14px; border-color:#E3EAF1; box-shadow:0 2px 8px rgba(16,59,99,.035); }
+    #view-admin .admin-tab, .tab-btn { border-radius:10px; }
+    .glass-nav { border-color:#E4EAF1; }
+    .pulse-red { animation:pulseRed 2s infinite; }
+    @media (min-width:768px) {
+      body { padding-left:112px!important; padding-bottom:0!important; }
+      #mainApp > .bg-bpd-blue:first-child { padding:18px 30px; }
+      #mainApp > .bg-white.sticky { top:72px!important; padding:12px 30px; }
+      #bottomNav { width:96px!important; padding:74px 10px 18px!important; justify-content:flex-start!important; gap:8px; }
+      #bottomNav .nav-item { width:76px!important; min-height:70px; flex:none!important; margin:0!important; }
+      #bottomNav .nav-item i { font-size:21px!important; }
+      #bottomNav .nav-item span { font-size:9px!important; }
+      #mainApp main { padding:28px clamp(24px,3vw,48px); }
+    }
+    @media (max-width:420px) {
+      #mainApp > .bg-bpd-blue:first-child { padding-left:17px; padding-right:17px; }
+      #mainApp > .bg-white.sticky { padding-left:10px; padding-right:10px; gap:5px; }
+      #mainApp > .bg-white.sticky input[type=date] { min-width:0; font-size:10px; padding:6px 4px; }
+      #bottomNav .nav-item span { font-size:7px!important; }
+      #bottomNav .nav-item i { font-size:16px!important; }
+      #mainApp main { padding:12px 12px 24px; }
+    }
+    @media (prefers-reduced-motion:reduce) { *,*::before,*::after { animation-duration:.01ms!important; transition-duration:.01ms!important; scroll-behavior:auto!important; } }
   </style>
 </head>
 <body class="text-slate-800 pb-24 md:pb-0 md:pl-28 selection:bg-blue-200 overflow-x-hidden relative min-h-screen">
@@ -1515,6 +1575,6 @@
         callGAS("getAppInitData").then(initData => { initGateway(initData); }).catch(err => { let s = document.getElementById('loginUserSelect'); if(s) s.innerHTML = '<option value="">ERROR KONEKSI SERVER</option>'; });
     });
   </script>
-  <script src="./v38.js?v=39"></script>
+  <script src="./v38.js?v=40"></script>
 </body>
 </html>
