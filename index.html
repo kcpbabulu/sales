@@ -83,11 +83,11 @@
     /* V42.1 UX polish */
     .crm-loading-bar{width:38%;animation:crmLoading 1.35s ease-in-out infinite}@keyframes crmLoading{0%{transform:translateX(-120%);width:32%}50%{width:58%}100%{transform:translateX(300%);width:32%}}
     body.crm-busy{overflow:hidden} #view-v38{min-height:calc(100dvh - 190px);scroll-margin-top:12px}
-    #v38Customers:empty:before{content:'Menyiapkan daftar nasabah…';display:block;padding:24px 12px;border:1px dashed #CBD5E1;border-radius:14px;color:#718096;font-size:12px;text-align:center;background:#F8FAFC}
+    #v38Customers:empty:before{content:'Memuat daftar nasabah…';display:block;padding:24px 12px;border:1px dashed #CBD5E1;border-radius:14px;color:#718096;font-size:12px;text-align:center;background:#F8FAFC} .crm-customer-skeleton{display:grid;gap:10px}.crm-customer-skeleton-card{height:84px;border-radius:14px;background:linear-gradient(90deg,#F1F5F9 25%,#E2E8F0 42%,#F1F5F9 63%);background-size:300% 100%;animation:crmSkeleton 1.25s ease infinite}@keyframes crmSkeleton{0%{background-position:100% 0}100%{background-position:0 0}}
     @media(prefers-reduced-motion:reduce){.crm-loading-bar{animation-duration:3s}.view-section{animation:none!important}html{scroll-behavior:auto}}
     /* V40 VISUAL SYSTEM — professional, calm, mobile-first */
     :root { --crm-navy:#103B63; --crm-blue:#075AA6; --crm-orange:#F47A20; --crm-ink:#172B42; --crm-muted:#718096; --crm-line:#E3EAF1; --crm-canvas:#F4F7FB; }
-    html { scroll-behavior:smooth; }
+    html { scroll-behavior:auto; }
     body { background:var(--crm-canvas); color:var(--crm-ink); letter-spacing:-.01em; }
     #mainApp { min-height:100vh; background:linear-gradient(180deg,#F7F9FC 0%,#F3F6FA 100%); }
     #mainApp > .bg-bpd-blue:first-child { background:linear-gradient(115deg,#073B70 0%,#075AA6 62%,#1677B9 100%); box-shadow:0 8px 24px rgba(9,54,96,.16); padding-top:max(1rem,env(safe-area-inset-top)); padding-bottom:1rem; }
@@ -551,7 +551,7 @@
 
   <section id="view-v38" class="view-section hidden animate-fade-in space-y-4 pb-8">
     <div class="rounded-3xl p-5 md:p-7 text-white shadow-lg" style="background:linear-gradient(120deg,#102B46,#2877B8)">
-      <div class="flex flex-wrap items-start justify-between gap-3"><div><p class="text-[10px] font-black tracking-[.2em] uppercase text-blue-100">CRM SUPER APP • V39 UNIFIED WORKSPACE</p><h2 class="text-2xl md:text-3xl font-black mt-2">Pusat Operasional</h2><p class="text-sm text-blue-100 mt-2 max-w-2xl">Profil nasabah, agenda tindak lanjut, dan pengajuan dalam satu workspace.</p></div><button onclick="v38Refresh()" class="rounded-xl bg-white/15 hover:bg-white/25 px-4 py-3 text-xs font-black"><i class="fa-solid fa-rotate mr-2"></i>MUAT ULANG</button></div>
+      <div class="flex flex-wrap items-start justify-between gap-3"><div><p class="text-[10px] font-black tracking-[.2em] uppercase text-blue-100">CRM PRO • CUSTOMER 360 WORKSPACE</p><h2 class="text-2xl md:text-3xl font-black mt-2">Pusat Operasional</h2><p class="text-sm text-blue-100 mt-2 max-w-2xl">Profil nasabah, agenda tindak lanjut, dan pengajuan dalam satu workspace.</p></div><button onclick="v38Refresh()" class="rounded-xl bg-white/15 hover:bg-white/25 px-4 py-3 text-xs font-black"><i class="fa-solid fa-rotate mr-2"></i>MUAT ULANG</button></div>
     </div>
     <div class="flex flex-wrap gap-2">
       <button onclick="switchMenu('crm')" class="rounded-xl bg-white border border-slate-200 text-slate-700 px-3 py-2 text-[10px] font-extrabold"><i class="fa-solid fa-address-card mr-1"></i> CRM LANJUTAN</button>
@@ -1011,26 +1011,46 @@
     }
 
     function switchMenu(viewId) {
-      // Legacy views are preserved and grouped under their nearest primary destination.
+      // Render the destination first; never wait for network work before revealing the view.
       if (viewId === 'admin' && (!activeUser || activeUser.role !== 'ADMIN')) {
         alert('Menu Administrasi hanya tersedia untuk Admin.');
         return;
       }
-      if (viewId === 'input') requestLocationUpdate();
-      if (viewId === 'crm') switchCRMTab(crmCurrentTab || 'follow');
-      if (viewId === 'v38' && typeof v38Refresh === 'function') v38Refresh();
-      if (viewId === 'reports' && printData) renderReports(printData);
       const target = document.getElementById('view-' + viewId);
       if (!target) { console.warn('Menu tidak ditemukan:', viewId); return; }
+      if (viewId === 'input') requestLocationUpdate();
+      if (viewId === 'crm') switchCRMTab(crmCurrentTab || 'follow');
+      if (viewId === 'reports' && printData) renderReports(printData);
+
       document.querySelectorAll('.view-section').forEach(el => el.classList.add('hidden'));
       target.classList.remove('hidden');
-      requestAnimationFrame(() => { window.scrollTo({top:0,left:0,behavior:'auto'}); target.scrollTop=0; });
       document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
       const navMap = { kpi:'kpi', v38:'v38', crm:'v38', input:'input', riwayat:'input', pipeline:'pipeline', reports:'reports', admin:'admin' };
       const activeNav = document.getElementById('nav-' + (navMap[viewId] || viewId));
       if (activeNav) activeNav.classList.add('active');
-      if (viewId === 'admin') renderManageStaffUI();
-      else if (viewId !== 'input') refreshDataServer();
+
+      // Reset every likely scroll container after the browser has committed the visible layout.
+      const resetViewScroll = () => {
+        window.scrollTo(0, 0);
+        document.documentElement.scrollTop = 0;
+        document.body.scrollTop = 0;
+        target.scrollTop = 0;
+        const parentScroller = target.closest('[data-view-scroll]');
+        if (parentScroller) parentScroller.scrollTop = 0;
+      };
+      resetViewScroll();
+      requestAnimationFrame(() => requestAnimationFrame(resetViewScroll));
+      setTimeout(resetViewScroll, 80);
+
+      if (viewId === 'v38') {
+        // Customer workspace has its own data request. Avoid duplicate dashboard/pipeline request.
+        if (typeof v38Refresh === 'function') v38Refresh();
+      } else if (viewId === 'admin') {
+        renderManageStaffUI();
+        refreshDataServer();
+      } else if (viewId !== 'input') {
+        refreshDataServer();
+      }
     }
 
     function togglePipelineTab(tipe) {
@@ -1598,4 +1618,3 @@
   <script src="./v38.js?v=40"></script>
 </body>
 </html>
-   
