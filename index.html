@@ -82,7 +82,7 @@
     
     /* V42.1 UX polish */
     .crm-loading-bar{width:38%;animation:crmLoading 1.35s ease-in-out infinite}@keyframes crmLoading{0%{transform:translateX(-120%);width:32%}50%{width:58%}100%{transform:translateX(300%);width:32%}}
-    body.crm-busy{overflow:hidden} #view-v38{min-height:calc(100dvh - 190px);scroll-margin-top:12px}
+    body.crm-busy{overflow:hidden} #view-v38{min-height:0;scroll-margin-top:12px}
     #v38Customers:empty:before{content:'Memuat daftar nasabah…';display:block;padding:24px 12px;border:1px dashed #CBD5E1;border-radius:14px;color:#718096;font-size:12px;text-align:center;background:#F8FAFC} .crm-customer-skeleton{display:grid;gap:10px}.crm-customer-skeleton-card{height:84px;border-radius:14px;background:linear-gradient(90deg,#F1F5F9 25%,#E2E8F0 42%,#F1F5F9 63%);background-size:300% 100%;animation:crmSkeleton 1.25s ease infinite}@keyframes crmSkeleton{0%{background-position:100% 0}100%{background-position:0 0}}
     @media(prefers-reduced-motion:reduce){.crm-loading-bar{animation-duration:3s}.view-section{animation:none!important}html{scroll-behavior:auto}}
     /* V40 VISUAL SYSTEM — professional, calm, mobile-first */
@@ -545,10 +545,8 @@
              <div class="bg-slate-50 border border-slate-200 rounded-2xl p-3 text-[10px] leading-relaxed text-slate-600">Catatan: halaman ini hanya menampilkan fungsi pengawasan yang tersedia pada implementasi saat ini. Tidak ada menu audit baru yang mengklaim membaca log server secara langsung; untuk audit formal, gunakan data sumber dan prosedur internal yang berlaku.</div>
            </div>
         </section>
-      </main>
-     <nav id="bottomNav" class="fixed bottom-0 left-0 w-full md:w-28 md:h-screen md:top-0 md:flex-col md:justify-center md:items-center glass-nav flex justify-around items-center pb-safe pt-2 md:pt-0 px-2 md:px-0 z-50 no-print border-t md:border-t-0 md:border-r border-slate-200/60 transition-all duration-500"></nav>
-  </div>
 
+        <!-- Customer 360 must live inside the shared main content container; placing it after #mainApp creates a blank gap equal to the dashboard height. -->
   <section id="view-v38" class="view-section hidden animate-fade-in space-y-4 pb-8">
     <div class="rounded-3xl p-5 md:p-7 text-white shadow-lg" style="background:linear-gradient(120deg,#102B46,#2877B8)">
       <div class="flex flex-wrap items-start justify-between gap-3"><div><p class="text-[10px] font-black tracking-[.2em] uppercase text-blue-100">CRM PRO • CUSTOMER 360 WORKSPACE</p><h2 class="text-2xl md:text-3xl font-black mt-2">Pusat Operasional</h2><p class="text-sm text-blue-100 mt-2 max-w-2xl">Profil nasabah, agenda tindak lanjut, dan pengajuan dalam satu workspace.</p></div><button onclick="v38Refresh()" class="rounded-xl bg-white/15 hover:bg-white/25 px-4 py-3 text-xs font-black"><i class="fa-solid fa-rotate mr-2"></i>MUAT ULANG</button></div>
@@ -577,6 +575,11 @@
     </div>
     <div id="v38AdminHealthWrap" class="hidden bg-slate-50 rounded-2xl border border-slate-200 p-4"><div class="flex items-center justify-between"><div><h3 class="font-black text-slate-800">Kesehatan sistem</h3><p class="text-xs text-slate-500 mt-1">Pemeriksaan skema database v38.</p></div><button onclick="v38CheckHealth()" class="rounded-xl bg-slate-800 text-white px-3 py-2 text-xs font-black">PERIKSA</button></div><pre id="v38Health" class="text-xs whitespace-pre-wrap mt-3 text-slate-600"></pre></div>
   </section>
+
+      </main>
+     <nav id="bottomNav" class="fixed bottom-0 left-0 w-full md:w-28 md:h-screen md:top-0 md:flex-col md:justify-center md:items-center glass-nav flex justify-around items-center pb-safe pt-2 md:pt-0 px-2 md:px-0 z-50 no-print border-t md:border-t-0 md:border-r border-slate-200/60 transition-all duration-500"></nav>
+  </div>
+
 
   <div id="v38CustomerProfileModal" class="hidden fixed inset-0 z-[100] bg-slate-950/60 p-3 md:p-6 overflow-y-auto" role="dialog" aria-modal="true" aria-labelledby="v38ProfileTitle">
     <div class="max-w-3xl mx-auto my-4 bg-white rounded-3xl shadow-2xl overflow-hidden">
