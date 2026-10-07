@@ -1,4 +1,4 @@
-const CACHE_NAME = 'crm-super-app-v41-global-search-superapp-shell';
+const CACHE_NAME = 'crm-super-app-v42-1-ux-loading-shell';
 const SHELL = ['./index.html', './manifest.json', './v38.js'];
 self.addEventListener('install', event => {
   event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(SHELL)).then(() => self.skipWaiting()));
