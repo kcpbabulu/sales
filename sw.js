@@ -1,4 +1,4 @@
-const CACHE_NAME = 'crm-super-app-v42-2-customer-view-stability';
+const CACHE_NAME = 'crm-super-app-v42-3-customer-layout-root-fix';
 const SHELL = ['./index.html', './manifest.json', './v38.js'];
 self.addEventListener('install', event => {
   event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(SHELL)).then(() => self.skipWaiting()));
